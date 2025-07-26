@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8" />
+  <title>Votre Page</title>
+  <script src="script.js" defer></script>
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+  <header>
+    <h1>Bienvenue</h1>
+    <nav>
+      <ul>
+        <li><a href="index.html">Accueil</a></li>
+        <li><a href="collection.html">Collection</a></li>
+      </ul>
+    </nav>
+  </header>
+
+  <main>
+    <h1>Gestion des Produits</h1>
+
+    <h2>Ajouter un produit</h2>
+    <input id="input-produit" placeholder="Nom du parfum" />
+    <button id="btn-ajouter" type="button">Ajouter</button>
+
+    <h2>Noter un produit</h2>
+    <select id="select-produit"></select>
+    <input id="input-utilisateur" placeholder="Utilisateur" />
+    <input id="input-note" type="number" min="0" max="20" placeholder="Note (0-20)" />
+    <button id="btn-noter" type="button">Noter</button>
+
+    <h2>Classement</h2>
+    <ol id="classement-produits"></ol>
+
+    <p id="msg"></p>
+  </main>
+
+  <footer>
+    <p>&copy; 2025 Parf. Tous droits réservés.</p>
+  </footer>
+</body>
+</html>
