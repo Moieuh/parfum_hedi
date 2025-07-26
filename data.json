@@ -2,18 +2,16 @@
   "parfums": [
     {
       "nom": "Eros energy",
+      "description": "Un parfum frais et élégant pour toutes les occasions.",
+      "image": "asset/ErosE.png",
+      "prix": 59.99,
       "notes": []
     },
     {
       "nom": "Aqua Vitalis",
-      "notes": []
-    },
-    {
-      "nom": "Rose Mystique",
-      "notes": []
-    },
-    {
-      "nom": "Citrus Spirit",
+      "description": "Des notes aquatiques et boisées pour une sensation de fraîcheur.",
+      "image": "asset/ErosE.png",
+      "prix": 49.99,
       "notes": []
     }
   ]

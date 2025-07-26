@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8" />
+  <title>Votre Page</title>
+  <script src="script.js" defer></script>
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+  <header>
+    <a href="index.html" class="logo" title="Accueil">
+      <svg width="32" height="32" viewBox="0 0 32 32" fill="none">
+        <circle cx="16" cy="16" r="15" stroke="#6366f1" stroke-width="2" fill="#fff"/>
+        <path d="M16 10v8M16 18l-4 4M16 18l4 4" stroke="#00ff75" stroke-width="2" stroke-linecap="round"/>
+      </svg>
+    </a>
+    <nav>
+      <ul>
+        <li><a href="index.html">Accueil</a></li>
+        <li><a href="collection.html">Collection</a></li>
+        <li><a href="ajout.html">Ajouter</a></li>
+      </ul>
+    </nav>
+  </header>
+  <main>
+    <h1>Gestion des Produits</h1>
+
+    <h2>Ajouter un produit</h2>
+    <input id="input-produit" placeholder="Nom du parfum" />
+    <button id="btn-ajouter" type="button">Ajouter</button>
+
+    <h2>Noter un produit</h2>
+    <select id="select-produit"></select>
+    <input id="input-utilisateur" placeholder="Utilisateur" />
+    <input id="input-note" type="number" min="0" max="20" placeholder="Note (0-20)" />
+    <button id="btn-noter" type="button">Noter</button>
+
+    <h2>Classement</h2>
+    <ol id="classement-produits"></ol>
+
+    <p id="msg"></p>
+  </main>
+
+  <footer>
+    <p>&copy; 2025 Parf. Tous droits réservés.</p><br>
+    <p>By Ali Belhassen directed by un casse couille </p>
+
+  </footer>
+</body>
+</html>

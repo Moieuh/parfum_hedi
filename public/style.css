@@ -1,0 +1,300 @@
+/* ===========================
+   PALETTE DE COULEURS
+   ===========================
+   Violet : #6366f1
+   Vert fluo : #00ff75
+   Gris foncé : #23232a
+   Gris clair : #e5e7eb
+   Bleu clair : #a5b4fc
+=========================== */
+
+/* ===========================
+   BASE ET TYPOGRAPHIE
+   =========================== */
+body {
+  margin: 0;
+  padding: 0;
+  font-family: 'Segoe UI', 'Roboto', Arial, sans-serif;
+  background: linear-gradient(120deg, #23232a 60%, #6366f1 100%);
+  color: #e5e7eb;
+  min-height: 100vh;
+}
+
+/* ===========================
+   HEADER & NAVIGATION
+   =========================== */
+header {
+  background: linear-gradient(90deg, #6366f1 0%, #00ff75 100%);
+  padding: 24px 0 12px 0;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  border-bottom: 2px solid #23232a;
+  box-shadow: 0 2px 8px rgba(99,102,241,0.08);
+}
+
+.logo {
+  /* Logo rond à gauche */
+  height: 48px;
+  width: 48px;
+  margin-left: 32px;
+  border-radius: 50%;
+  box-shadow: 0 2px 8px rgba(0,0,0,0.15);
+  background: #fff;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+header h1 {
+  /* Titre principal */
+  margin: 0 0 0 16px;
+  color: #23232a;
+  font-size: 2.2em;
+  font-weight: 700;
+  letter-spacing: 2px;
+}
+
+nav ul {
+  /* Liste de navigation horizontale */
+  list-style: none;
+  display: flex;
+  gap: 32px;
+  margin: 0 32px 0 0;
+  padding: 0;
+}
+
+nav a {
+  /* Liens de navigation */
+  color: #fff;
+  text-decoration: none;
+  font-weight: bold;
+  font-size: 1.1em;
+  padding: 8px 18px;
+  border-radius: 8px;
+  transition: background 0.2s, color 0.2s;
+}
+
+nav a:hover {
+  background: #fff;
+  color: #6366f1;
+}
+
+/* ===========================
+   CONTENU PRINCIPAL
+   =========================== */
+main {
+  max-width: 700px;
+  margin: 40px auto 0 auto;
+  background: rgba(35,35,42,0.95);
+  border-radius: 24px;
+  box-shadow: 0 4px 24px rgba(99,102,241,0.10);
+  padding: 32px 32px 24px 32px;
+}
+
+main h1 {
+  /* Titre de section */
+  color: #a5b4fc;
+  font-size: 2em;
+  margin-bottom: 16px;
+  text-align: center;
+}
+
+main h2 {
+  /* Sous-titres */
+  color: #00ff75;
+  margin-top: 32px;
+  margin-bottom: 12px;
+  font-size: 1.2em;
+}
+
+/* ===========================
+   FORMULAIRES & BOUTONS
+   =========================== */
+input, select, button {
+  font-size: 1em;
+  padding: 8px 12px;
+  border-radius: 8px;
+  border: none;
+  margin-right: 8px;
+  margin-bottom: 8px;
+  background: #23232a;
+  color: #e5e7eb;
+  box-shadow: 0 1px 4px rgba(99,102,241,0.08);
+  outline: none;
+  transition: box-shadow 0.2s, background 0.2s;
+}
+
+input:focus, select:focus {
+  box-shadow: 0 0 0 2px #6366f1;
+  background: #23232a;
+}
+
+button {
+  background: linear-gradient(90deg, #6366f1 0%, #00ff75 100%);
+  color: #23232a;
+  font-weight: bold;
+  cursor: pointer;
+  border: none;
+  transition: background 0.2s, color 0.2s;
+}
+
+button:hover {
+  background: #fff;
+  color: #6366f1;
+}
+
+/* ===========================
+   LISTES
+   =========================== */
+ul, ol {
+  background: #23232a;
+  border-radius: 12px;
+  padding: 16px 24px;
+  margin: 0 0 16px 0;
+  box-shadow: 0 2px 8px rgba(99,102,241,0.08);
+}
+
+li {
+  margin-bottom: 8px;
+  color: #e5e7eb;
+}
+
+/* ===========================
+   CARDS COLLECTION
+   =========================== */
+.card {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 0;
+  margin-left: 0;
+  padding-left: 0;
+  width: 100%;
+}
+
+.card2 {
+  width: 100%;
+  box-sizing: border-box;
+  background: #23232a;
+  border-radius: 16px;
+  box-shadow: 0 2px 8px rgba(99,102,241,0.08);
+  margin-left: 0;
+  margin-right: 0;
+  margin-bottom: 0;
+  display: flex;
+  align-items: center;
+  padding: 0 24px;
+  margin-top: 16px;
+  justify-content: space-between; /* Ajouté pour séparer le contenu et le bouton */
+}
+
+.card2-content {
+  display: flex;
+  align-items: center;
+  flex: 1;
+}
+
+.card2 img {
+  height: 80px;
+  width: 80px;
+  border-radius: 12px;
+  margin-right: 24px;
+  object-fit: cover;
+  border: 2px solid #6366f1;
+  background: #fff;
+}
+
+.card2 h2 {
+  margin: 0;
+  color: #a5b4fc;
+  font-size: 1.2em;
+}
+
+.card2 p {
+  margin: 0;
+  color: #e5e7eb;
+  font-size: 1em;
+}
+
+.card2 button {
+  margin-left: auto; /* Pour pousser le bouton à droite */
+}
+
+/* ===========================
+   FOOTER
+   =========================== */
+footer {
+  background: linear-gradient(90deg, #6366f1 0%, #00ff75 100%);
+  color: #23232a;
+  text-align: center;
+  padding: 18px 0;
+  font-size: 1em;
+  margin-top: 48px;
+  border-top: 2px solid #23232a;
+  box-shadow: 0 -2px 8px rgba(99,102,241,0.08);
+  position: fixed;
+  left: 0;
+  bottom: 0;
+  width: 100%;
+  z-index: 100;
+}
+
+/* ===========================
+   RESPONSIVE DESIGN
+   =========================== */
+@media (max-width: 800px) {
+  main {
+    max-width: 98vw;
+    padding: 16px 4vw;
+  }
+  header, nav ul {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 12px;
+  }
+  .logo {
+    margin-left: 8px;
+  }
+}
+
+/* ===========================
+   MODAL STYLES
+   =========================== */
+.modal {
+  display: none;
+  position: fixed;
+  z-index: 500;
+  left: 0;
+  top: 0;
+  width: 100vw;
+  height: 100vh;
+  overflow: auto;
+  background-color: rgba(0,0,0,0.5);
+}
+
+.modal-content {
+  background-color: #23232a;
+  margin: 10% auto;
+  padding: 32px;
+  border: 1px solid #6366f1;
+  border-radius: 24px;
+  width: 90%;
+  max-width: 600px;
+  box-shadow: 0 4px 24px rgba(99, 102, 241, 0.25);
+  position: relative;
+}
+
+.modal-content h2 {
+  text-align: center;
+  color: #a5b4fc;
+}
+
+.modal .close {
+  color: #fff;
+  position: absolute;
+  right: 16px;
+  top: 12px;
+  font-size: 24px;
+  cursor: pointer;
+}

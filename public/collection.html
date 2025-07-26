@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <title>Collection Parf</title>
+    <script src="script.js" defer></script>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+  <header>
+    <a href="index.html" class="logo" title="Accueil">
+      <svg width="32" height="32" viewBox="0 0 32 32" fill="none">
+        <circle cx="16" cy="16" r="15" stroke="#6366f1" stroke-width="2" fill="#fff"/>
+        <path d="M16 10v8M16 18l-4 4M16 18l4 4" stroke="#00ff75" stroke-width="2" stroke-linecap="round"/>
+      </svg>
+    </a>
+    <nav>
+      <ul>
+        <li><a href="index.html">Accueil</a></li>
+        <li><a href="collection.html">Collection</a></li>
+        <li><a href="ajout.html">Ajouter</a></li>
+      </ul>
+    </nav>
+  </header>
+
+<div>
+    <h1>Collection</h1>
+    <div id="cards-container" class="card"></div>
+    <button id="ouvrir-formulaire" style="margin: 16px;">Ajouter un parfum</button>
+
+    <div id="modal-ajout" class="modal">
+      <div class="modal-content">
+        <span class="close">&times;</span>
+        <h2>Ajouter un parfum</h2>
+        <form id="form-ajout" onsubmit="return false;">
+          <input id="input-produit" placeholder="Nom du parfum" required />
+          <input id="input-description" placeholder="Description" required />
+          <input id="input-image" placeholder="Image (chemin ou URL)" required />
+          <input id="input-prix" type="number" step="0.01" placeholder="Prix en €" required />
+          <button id="btn-ajouter" type="button">Ajouter</button>
+        </form>
+        <p id="msg"></p>
+      </div>
+    </div>
+
+    <div id="carte-detail"></div>
+</div>
+
+  <footer>
+    <p>&copy; 2025 Parf. Tous droits réservés.</p> 
+        <p>By Ali Belhassen directed by un casse couille </p>
+
+  </footer>
+</body>
+</html>
+   
