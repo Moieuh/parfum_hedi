@@ -27,7 +27,7 @@
     <form id="form-ajout" onsubmit="return false;">
       <input id="input-produit" placeholder="Nom du parfum" />
       <input id="input-description" placeholder="Description" />
-      <input id="input-image" placeholder="Image (chemin ou URL)" />
+      <input id="input-image" name="image" type="file" required />
       <input id="input-prix" type="number" step="0.01" placeholder="Prix en €" />
       <button id="btn-ajouter" type="button">Ajouter</button>
     </form>

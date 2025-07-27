@@ -4,11 +4,16 @@ async function chargerParfums() {
   return parfums;
 }
 
-async function ajouterParfum(nom, description, image, prix) {
+async function ajouterParfum(nom, description, imageFile, prix) {
+  const formData = new FormData();
+  formData.append('nom', nom);
+  formData.append('description', description);
+  formData.append('image', imageFile);
+  formData.append('prix', prix);
+
   return await fetch('/api/parfums', {
     method: 'POST',
-    headers: { 'Content-Type': 'application/json' },
-    body: JSON.stringify({ nom, description, image, prix: parseFloat(prix) })
+    body: formData
   });
 }
 
@@ -81,22 +86,29 @@ document.addEventListener('DOMContentLoaded', () => {
     const nom = document.getElementById('input-produit').value.trim();
     const description = document.getElementById('input-description').value.trim();
     const fichier = document.getElementById('input-image').files[0];
+    const prix = document.getElementById('input-prix').value.trim();
+
     if (!fichier) {
       afficherMessage("Veuillez sélectionner une image.", true);
       return;
     }
 
-const image = await convertirEnBase64(fichier);
-    const prix = document.getElementById('input-prix').value.trim();
-
-    if (nom && description && image && prix) {
-      const res = await ajouterParfum(nom, description, image, prix);
+    if (nom && description && fichier && prix) {
+      const res = await ajouterParfum(nom, description, fichier, prix);
       if (res.ok) {
         afficherMessage("Parfum ajouté !");
-        ajouterCarteParfum({ nom, description, image, prix });
+        // On suppose que le backend retourne le parfum ajouté avec le chemin image
+        const parfumAjoute = await res.json();
+        ajouterCarteParfum(parfumAjoute);
         document.getElementById('modal-ajout').style.display = 'none';
       } else {
-        const data = await res.json();
+        let data;
+        try {
+          data = await res.json();
+        } catch (e) {
+          afficherMessage("Erreur serveur : impossible de lire la réponse.", true);
+          return;
+        }
         afficherMessage(data.error || "Erreur lors de l'ajout", true);
       }
 
@@ -197,13 +209,4 @@ function ajouterCarteParfum(p) {
   card.appendChild(content);
   card.appendChild(btn);
   container.appendChild(card);
-}
-
-function convertirEnBase64(fichier) {
-  return new Promise((resolve, reject) => {
-    const reader = new FileReader();
-    reader.onload = () => resolve(reader.result);
-    reader.onerror = reject;
-    reader.readAsDataURL(fichier);
-  });
 }
