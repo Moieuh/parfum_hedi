@@ -222,23 +222,29 @@ li {
 }
 
 /* ===========================
-   FOOTER
-   =========================== */
+  FOOTER
+  =========================== */
 footer {
   background: linear-gradient(90deg, #6366f1 0%, #00ff75 100%);
   color: #23232a;
   text-align: center;
-  padding: 18px 0;
-  font-size: 1em;
-  margin-top: 48px;
+  padding: 24px 0 12px 0;
+  font-size: 0.95em;
+  margin-top: 32px;
   border-top: 2px solid #23232a;
   box-shadow: 0 -2px 8px rgba(99,102,241,0.08);
-  position: fixed;
+  position: absolute;
   left: 0;
   bottom: 0;
   width: 100%;
   z-index: 100;
 }
+body {
+  min-height: 100vh;
+  position: relative;
+  padding-bottom: 60px; 
+}
+
 
 /* ===========================
    RESPONSIVE DESIGN
@@ -259,7 +265,7 @@ footer {
 }
 
 /* ===========================
-   MODAL STYLES
+   Ajout STYLES
    =========================== */
 .modal {
   display: none;
@@ -297,4 +303,60 @@ footer {
   top: 12px;
   font-size: 24px;
   cursor: pointer;
+}
+
+.btn-flottant {
+  position: fixed;
+  bottom: 32px;
+  right: 32px;
+  background: linear-gradient(90deg, #00ff75, #6366f1);
+  color: #23232a;
+  border: none;
+  font-size: 32px;
+  border-radius: 50%;
+  width: 60px;
+  height: 60px;
+  box-shadow: 0 4px 24px rgba(0, 0, 0, 0.3);
+  cursor: pointer;
+  transition: transform 0.2s, box-shadow 0.2s;
+  z-index: 600;
+}
+
+.btn-flottant:hover {
+  transform: scale(1.1);
+  box-shadow: 0 4px 32px rgba(0, 255, 117, 0.4);
+}
+
+/* Style personnalisé pour input type="file" */
+input[type="file"] {
+  background: transparent;
+  border: 2px dashed #6366f1;
+  padding: 12px;
+  color: #e5e7eb;
+  font-size: 1em;
+  border-radius: 12px;
+  transition: border-color 0.3s, background 0.3s;
+  cursor: pointer;
+}
+
+input[type="file"]:hover {
+  background: rgba(99, 102, 241, 0.1);
+  border-color: #00ff75;
+}
+
+input[type="file"]::file-selector-button {
+  background: linear-gradient(90deg, #00ff75, #6366f1);
+  border: none;
+  padding: 8px 14px;
+  color: #23232a;
+  font-weight: bold;
+  border-radius: 8px;
+  cursor: pointer;
+  margin-right: 16px;
+  transition: background 0.3s;
+}
+
+input[type="file"]::file-selector-button:hover {
+  background: #fff;
+  color: #6366f1;
 }
