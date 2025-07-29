@@ -32,17 +32,35 @@ app.post('/api/parfums', upload.single('image'), (req, res) => {
   const ext = path.extname(imageFile.originalname);
   const newFilename = `${Date.now()}_${nom.replace(/\s+/g, '_')}${ext}`;
   const newPath = path.join(imageFile.destination, newFilename);
-
   fs.renameSync(imageFile.path, newPath);
 
   const data = JSON.parse(fs.readFileSync(DATA_FILE, 'utf8'));
+
   const parfum = {
     nom,
     description,
     image: `asset/${newFilename}`,
     prix: parseFloat(prix),
-    notes: []
+    notes: [],
+    tenacite: {
+      "médiocre": 0,
+      "faible": 0,
+      "modéré (e)": 0,
+      "longue tenue": 0,
+      "très longue tenue": 0
+    },
+    sillage: {
+      "discret": 0,
+      "modéré (e)": 0,
+      "puissant": 0,
+      "énorme": 0
+    },
+    votes: {
+      tenacite: {},
+      sillage: {}
+    }
   };
+
   data.parfums.push(parfum);
   fs.writeFileSync(DATA_FILE, JSON.stringify(data, null, 2));
 
@@ -56,13 +74,62 @@ app.post('/api/parfums/:nom/note', (req, res) => {
   const parfum = data.parfums.find(p => p.nom === req.params.nom);
 
   if (parfum) {
-    parfum.notes.push({ utilisateur, note });
+    const index = parfum.notes.findIndex(n => n.utilisateur === utilisateur);
+    if (index !== -1) {
+      // 📝 Mise à jour de la note existante
+      parfum.notes[index].note = note;
+    } else {
+      // 🆕 Nouvelle note
+      parfum.notes.push({ utilisateur, note });
+    }
+
     fs.writeFileSync(DATA_FILE, JSON.stringify(data, null, 2));
-    res.json({ message: 'Note ajoutée' });
+    res.json({ message: 'Note enregistrée' });
   } else {
     res.status(404).json({ error: 'Parfum non trouvé' });
   }
 });
+
+
+// ✅ Route : Voter pour ténacité ou sillage
+app.post('/api/parfums/:nom/vote', (req, res) => {
+  const { type, valeur, utilisateur } = req.body;
+  const data = JSON.parse(fs.readFileSync(DATA_FILE));
+  const parfum = data.parfums.find(p => p.nom === req.params.nom);
+
+  if (!parfum || !['tenacite', 'sillage'].includes(type)) {
+    return res.status(400).json({ error: 'Paramètres invalides' });
+  }
+
+  if (!(valeur in parfum[type])) {
+    return res.status(400).json({ error: 'Valeur invalide' });
+  }
+
+  if (!utilisateur || utilisateur.trim() === '') {
+    return res.status(400).json({ error: 'Nom utilisateur manquant' });
+  }
+
+  if (!parfum.votes) {
+    parfum.votes = { tenacite: {}, sillage: {} };
+  }
+
+  // Si l'utilisateur avait déjà voté
+  const ancienVote = parfum.votes[type][utilisateur];
+  if (ancienVote && ancienVote !== valeur) {
+    // On décrémente l'ancien vote
+    if (parfum[type][ancienVote] > 0) {
+      parfum[type][ancienVote]--;
+    }
+  }
+
+  // Incrémente la nouvelle valeur
+  parfum[type][valeur]++;
+  parfum.votes[type][utilisateur] = valeur;
+
+  fs.writeFileSync(DATA_FILE, JSON.stringify(data, null, 2));
+  res.json({ message: 'Vote enregistré' });
+});
+
 
 // ✅ Route : Supprimer un parfum + image
 app.delete('/api/parfums/:nom', (req, res) => {
@@ -84,7 +151,6 @@ app.delete('/api/parfums/:nom', (req, res) => {
       }
     }
 
-    // Supprimer le parfum du JSON
     data.parfums.splice(index, 1);
     fs.writeFileSync(DATA_FILE, JSON.stringify(data, null, 2));
     res.json({ message: 'Parfum supprimé' });

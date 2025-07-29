@@ -360,3 +360,190 @@ input[type="file"]::file-selector-button:hover {
   background: #fff;
   color: #6366f1;
 }
+
+.detail-parfum {
+  margin-top: 32px;
+  padding: 24px;
+  background: rgba(255, 255, 255, 0.03);
+  border: 1px solid #6366f1;
+  border-radius: 16px;
+  box-shadow: 0 2px 12px rgba(0, 0, 0, 0.2);
+}
+
+.detail-parfum h2, .detail-parfum h3 {
+  color: #a5b4fc;
+  margin-bottom: 8px;
+}
+
+.barre-vote {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  margin: 4px 0;
+}
+
+.barre-vote span {
+  min-width: 130px;
+}
+
+.barre-vote progress {
+  flex: 1;
+  height: 12px;
+  appearance: none;
+}
+
+.vote-clickable {
+  cursor: pointer;
+  transition: background 0.2s;
+}
+
+.vote-clickable:hover {
+  background-color: rgba(255, 255, 255, 0.05);
+}
+
+.vote-bar {
+  margin-top: 20px;
+}
+
+.crans {
+  display: flex;
+  gap: 12px;
+  margin-top: 8px;
+  flex-wrap: wrap;
+}
+
+.cran {
+  background-color: #23232a;
+  border: 2px solid #6366f1;
+  padding: 6px 12px;
+  border-radius: 12px;
+  cursor: pointer;
+  font-size: 0.9em;
+  color: #a5b4fc;
+  transition: all 0.2s ease;
+  text-align: center;
+}
+
+.cran:hover {
+  background-color: #6366f1;
+  color: #23232a;
+}
+
+.cran.actif {
+  background: linear-gradient(90deg, #00ff75, #6366f1);
+  color: #23232a;
+  font-weight: bold;
+  border-color: #00ff75;
+}
+
+/* ===========================
+   STYLES LOGIN PAGE
+   =========================== */
+   /* ===========================
+   FORMULAIRE DE CONNEXION
+   =========================== */
+.login-container {
+  position: relative;
+  overflow: hidden;
+  max-width: 400px;
+  margin: 48px auto;
+  padding: 48px 32px;
+  border-radius: 24px;
+  border: 2px solid #6366f1;
+  background: linear-gradient(120deg, #23232a 70%, #6366f1 100%);
+  box-shadow: 0 8px 32px rgba(99,102,241,0.18), 0 2px 8px rgba(0,0,0,0.18);
+  text-align: center;
+  z-index: 1;
+}
+
+.login-container::before {
+  content: "";
+  position: absolute;
+  top: -40px;
+  left: -40px;
+  width: 120px;
+  height: 120px;
+  background: radial-gradient(circle, #00ff75 40%, transparent 70%);
+  opacity: 0.18;
+  z-index: 0;
+}
+
+/* Titre */
+.login-container h1 {
+  font-size: 2em;
+  font-weight: 700;
+  letter-spacing: 2px;
+  color: #a5b4fc;
+  margin-bottom: 28px;
+  text-shadow: 0 2px 8px rgba(99,102,241,0.12);
+  position: relative;
+  z-index: 1;
+}
+
+/* Labels */
+.login-container label {
+  display: block;
+  color: #a5b4fc;
+  font-weight: 500;
+  margin-bottom: 8px;
+  text-align: left;
+  position: relative;
+  z-index: 1;
+}
+
+/* Champs de saisie */
+.login-container input {
+  width: 90%;
+  padding: 12px 16px;
+  margin-bottom: 24px;
+  border-radius: 12px;
+  border: 2px solid #6366f1;
+  background: rgba(35,35,42,0.92);
+  color: #e5e7eb;
+  font-size: 1.05em;
+  box-shadow: 0 2px 8px rgba(99,102,241,0.08);
+  outline: none;
+  transition: border-color 0.2s, box-shadow 0.2s, background 0.2s;
+  position: relative;
+  z-index: 1;
+}
+
+.login-container input:focus {
+  border-color: #00ff75;
+  background: rgba(99,102,241,0.08);
+  box-shadow: 0 0 0 2px #00ff75;
+}
+
+/* Bouton de connexion */
+.login-container button {
+  padding: 12px 32px;
+  border: none;
+  border-radius: 12px;
+  font-size: 1.1em;
+  font-weight: bold;
+  cursor: pointer;
+  color: #23232a;
+  background: linear-gradient(90deg, #00ff75 0%, #6366f1 100%);
+  box-shadow: 0 2px 8px rgba(99,102,241,0.12);
+  transition: background 0.2s, color 0.2s, transform 0.2s;
+  position: relative;
+  z-index: 1;
+}
+
+.login-container button:hover {
+  background: #fff;
+  color: #6366f1;
+  transform: scale(1.05);
+}
+
+/* Message d’erreur */
+.login-container .login-error {
+  color: #ff4d4f;
+  background: rgba(255,77,79,0.08);
+  border-radius: 8px;
+  padding: 8px 0;
+  margin-bottom: 16px;
+  font-size: 0.98em;
+  position: relative;
+  z-index: 1;
+}

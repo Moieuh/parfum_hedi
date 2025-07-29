@@ -5,14 +5,56 @@
       "description": "Un parfum frais et élégant pour toutes les occasions.",
       "image": "asset/ErosE.png",
       "prix": 59.99,
-      "notes": []
+      "notes": [],
+      "tenacite": {
+        "médiocre": 0,
+        "faible": 0,
+        "modéré (e)": 1,
+        "longue tenue": 0,
+        "très longue tenue": 0
+      },
+      "sillage": {
+        "discret": 0,
+        "modéré (e)": 0,
+        "puissant": 1,
+        "énorme": 0
+      },
+      "votes": {
+        "tenacite": {
+          "Ali": "modéré (e)"
+        },
+        "sillage": {
+          "Ali": "puissant"
+        }
+      }
     },
     {
-      "nom": "Aqua Vitalis",
-      "description": "Des notes aquatiques et boisées pour une sensation de fraîcheur.",
-      "image": "asset/ErosE.png",
-      "prix": 49.99,
-      "notes": []
+      "nom": "Eros flamme",
+      "description": "xxx",
+      "image": "asset/1753751652983_Eros_flamme.png",
+      "prix": 0,
+      "notes": [],
+      "tenacite": {
+        "médiocre": 0,
+        "faible": 0,
+        "modéré (e)": 0,
+        "longue tenue": 1,
+        "très longue tenue": 0
+      },
+      "sillage": {
+        "discret": 0,
+        "modéré (e)": 0,
+        "puissant": 1,
+        "énorme": 0
+      },
+      "votes": {
+        "tenacite": {
+          "Ali": "longue tenue"
+        },
+        "sillage": {
+          "Ali": "puissant"
+        }
+      }
     }
   ]
 }
