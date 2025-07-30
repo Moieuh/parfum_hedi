@@ -21,7 +21,7 @@ app.get('/api/parfums', (req, res) => {
 
 // Route : Ajouter un parfum
 app.post('/api/parfums', upload.single('image'), (req, res) => {
-  const { nom, description, prix } = req.body;
+  const { nom, description, prix, marque, taille, dateAchat, occasions } = req.body;
   const imageFile = req.file;
 
   if (!nom || !description || !prix || !imageFile) {
@@ -41,6 +41,10 @@ app.post('/api/parfums', upload.single('image'), (req, res) => {
     description,
     image: `asset/${newFilename}`,
     prix: parseFloat(prix),
+    marque,
+    taille,
+    dateAchat,
+    occasions,
     notes: [],
     tenacite: {
       "médiocre": 0,

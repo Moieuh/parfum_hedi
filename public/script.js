@@ -4,12 +4,16 @@ async function chargerParfums() {
   return await res.json();
 }
 
-async function ajouterParfum(nom, description, imageFile, prix) {
+async function ajouterParfum(nom, description, imageFile, prix, marque, taille, dateAchat, occasions) {
   const formData = new FormData();
   formData.append('nom', nom);
   formData.append('description', description);
   formData.append('image', imageFile);
   formData.append('prix', prix);
+  formData.append('marque', marque);
+  formData.append('taille', taille);
+  formData.append('dateAchat', dateAchat);
+  formData.append('occasions', occasions);
 
   return await fetch('/api/parfums', {
     method: 'POST',
@@ -33,7 +37,13 @@ async function voterParfum(nom, type, valeur, utilisateur) {
   });
 }
 
-// === UI MISE À JOUR ===
+async function supprimerParfum(nom) {
+  const res = await fetch(`/api/parfums/${encodeURIComponent(nom)}`, { method: 'DELETE' });
+  if (res.ok) document.querySelector(`.card2[data-produit="${nom}"]`)?.remove();
+  else alert((await res.json()).error || 'Erreur lors de la suppression');
+}
+
+// === UI UTILITAIRES ===
 function afficherMessage(msg, isError = false) {
   const msgEl = document.getElementById('msg');
   if (msgEl) {
@@ -42,6 +52,7 @@ function afficherMessage(msg, isError = false) {
   }
 }
 
+// === UI MISE À JOUR ===
 async function majInterface() {
   const parfums = await chargerParfums();
   const select = document.getElementById('select-produit');
@@ -97,6 +108,7 @@ function ajouterCarteParfum(p) {
   const info = document.createElement('div');
   info.innerHTML = `<h2>${p.nom}</h2><p>${p.description}</p><p>Prix : ${p.prix.toFixed(2)} €</p>`;
 
+  
   const btn = document.createElement('button');
   btn.className = 'btn-supprimer';
   btn.textContent = 'Supprimer';
@@ -114,12 +126,6 @@ function ajouterCarteParfum(p) {
   container.appendChild(card);
 }
 
-async function supprimerParfum(nom) {
-  const res = await fetch(`/api/parfums/${encodeURIComponent(nom)}`, { method: 'DELETE' });
-  if (res.ok) document.querySelector(`.card2[data-produit="${nom}"]`)?.remove();
-  else alert((await res.json()).error || 'Erreur lors de la suppression');
-}
-
 function afficherDetailParfum(parfum) {
   const detail = document.getElementById('carte-detail');
   if (!detail) return;
@@ -129,7 +135,6 @@ function afficherDetailParfum(parfum) {
     : 'À venir';
 
   const utilisateur = localStorage.getItem("utilisateur");
-
 
   function creerBarre(type, labels) {
     const voteActuel = parfum.votes?.[type]?.[utilisateur] || null;
@@ -150,6 +155,10 @@ function afficherDetailParfum(parfum) {
       <h2>${parfum.nom}</h2>
       <p><strong>Description :</strong> ${parfum.description}</p>
       <p><strong>Prix :</strong> ${parfum.prix.toFixed(2)} €</p>
+      ${parfum.marque ? `<p><strong>Marque :</strong> ${parfum.marque}</p>` : ''}
+      ${parfum.taille ? `<p><strong>Taille :</strong> ${parfum.taille} ml</p>` : ''}
+      ${parfum.dateAchat ? `<p><strong>Date d'achat :</strong> ${parfum.dateAchat}</p>` : ''}
+      ${parfum.occasions ? `<p><strong>Occasion :</strong> ${parfum.occasions}</p>` : ''}
       <p><strong>Moyenne :</strong> ${moyenne}</p>
       ${creerBarre("tenacite", ["médiocre", "faible", "modéré (e)", "longue tenue", "très longue tenue"])}
       ${creerBarre("sillage", ["discret", "modéré (e)", "puissant", "énorme"])}
@@ -168,15 +177,28 @@ function afficherDetailParfum(parfum) {
         const parfums = await chargerParfums();
         const parfumMaj = parfums.find(p => p.nom === parfum.nom);
         afficherDetailParfum(parfumMaj);
+        majInterface();
       } else {
         const err = await res.json();
         alert(err.error || "Erreur lors du vote");
       }
+      
     });
   });
 }
 
-// === INIT ===
+// === AUTHENTIFICATION ===
+function login() {
+  const username = document.getElementById('username').value.trim();
+  if (username) {
+    localStorage.setItem('utilisateur', username);
+    window.location.href = 'collection.html';
+  } else {
+    alert("Veuillez entrer votre nom d'utilisateur.");
+  }
+}
+
+// === INITIALISATION ===
 document.addEventListener('DOMContentLoaded', () => {
   const modal = document.getElementById('modal-ajout');
   const btnOpen = document.getElementById('ouvrir-formulaire');
@@ -191,15 +213,20 @@ document.addEventListener('DOMContentLoaded', () => {
     const description = document.getElementById('input-description').value.trim();
     const fichier = document.getElementById('input-image').files[0];
     const prix = document.getElementById('input-prix').value.trim();
+    const marque = document.getElementById('input-marque').value.trim();
+    const taille = document.getElementById('input-taille').value.trim();
+    const dateAchat = document.getElementById('input-dateAchat').value;
+    const occasions = document.getElementById('input-occasions').value;
 
     if (!fichier) return afficherMessage("Veuillez sélectionner une image.", true);
 
     if (nom && description && fichier && prix) {
-      const res = await ajouterParfum(nom, description, fichier, prix);
+      const res = await ajouterParfum(nom, description, fichier, prix, marque, taille, dateAchat, occasions);
       if (res.ok) {
         afficherMessage("Parfum ajouté !");
-        const parfumAjoute = await res.json();
-        ajouterCarteParfum(parfumAjoute);
+        const parfums = await chargerParfums();
+        const nouveau = parfums.find(p => p.nom === nom);
+        ajouterCarteParfum(nouveau);
         modal.style.display = 'none';
       } else {
         const data = await res.json().catch(() => ({}));
@@ -231,13 +258,3 @@ document.addEventListener('DOMContentLoaded', () => {
   afficherCollection();
   majInterface();
 });
-
-function login() {
-      const username = document.getElementById('username').value.trim();
-      if (username) {
-        localStorage.setItem('utilisateur', username);
-        window.location.href = 'collection.html';
-      } else {
-        alert("Veuillez entrer votre nom d'utilisateur.");
-      }
-    }
