@@ -109,18 +109,32 @@ function ajouterCarteParfum(p) {
   info.innerHTML = `<h2>${p.nom}</h2><p>${p.description}</p><p>Prix : ${p.prix.toFixed(2)} €</p>`;
 
   
-  const btn = document.createElement('button');
-  btn.className = 'btn-supprimer';
-  btn.textContent = 'Supprimer';
-  btn.onclick = () => {
+  // Bouton Supprimer
+  const btnSupprimer = document.createElement('button');
+  btnSupprimer.className = 'btn-supprimer';
+  btnSupprimer.textContent = 'Supprimer';
+  btnSupprimer.onclick = () => {
     if (confirm(`Supprimer le parfum "${p.nom}" ?`)) supprimerParfum(p.nom);
   };
+
+  // Bouton Modifier
+  const btnModifier = document.createElement('button');
+  btnModifier.className = 'btn-modifier';
+  btnModifier.textContent = 'Modifier ce parfum';
+  btnModifier.onclick = () => {
+    alert(`Modifier parfum : ${p.nom}`); // 💡 Remplacera par une vraie modale de modification plus tard
+  };
+
+  // Conteneur des boutons
+  const actions = document.createElement('div');
+  actions.className = 'card2-actions';
+  actions.appendChild(btnModifier);
+  actions.appendChild(btnSupprimer);
 
   content.appendChild(img);
   content.appendChild(info);
   card.appendChild(content);
-  card.appendChild(btn);
-
+  card.appendChild(actions);
   content.addEventListener('click', () => afficherDetailParfum(p));
 
   container.appendChild(card);
