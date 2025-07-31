@@ -31,35 +31,41 @@
 
   <!-- ✅ Bouton flottant -->
   <button id="ouvrir-formulaire" class="btn-flottant">+</button>
-
-  <!-- ✅ Modale ajout -->
-  <div id="modal-ajout" class="modal">
-    <div class="modal-content">
-      <span class="close">&times;</span>
-      <h2>Ajouter un parfum</h2>
-      <form id="form-ajout" enctype="multipart/form-data" onsubmit="return false;">
-        <input id="input-produit" placeholder="Nom du parfum" required />
-        <input id="input-description" placeholder="Description"/>
-        <input id="input-prix" type="number" step="0.01" placeholder="Prix en €" required />
-        <input id="input-image" name="image" type="file"/>
-        <input id="input-marque" name="marque" placeholder="Marque" />
-        <input id="input-taille" name="taille" type="number" placeholder="Taille (ml)" />
-        <input id="input-dateAchat" name="dateAchat" type="date" placeholder="Date d'achat" />
-        <select id="input-occasions" name="occasions">
-          <option value="">-- Choisir une occasion --</option>
-          <option value="quotidien">Quotidien</option>
-          <option value="soirée">Soirée</option>
-          <option value="travail">Travail</option>
-          <option value="sport">Sport</option>
-          <option value="sport">Date</option>
-
-        </select>
-
-        <button id="btn-ajouter" type="button">Ajouter</button>
-      </form>
-      <p id="msg"></p>
-    </div>
+<!-- ✅ Modale ajout -->
+<div id="modal-ajout" class="modal">
+  <div class="modal-content">
+    <span class="close">&times;</span>
+    <h2>Ajouter un parfum</h2>
+    <form id="form-ajout" enctype="multipart/form-data" onsubmit="return false;">
+      <input id="input-produit" placeholder="Nom du parfum" required />
+      <input id="input-description" placeholder="Description"/>
+      <input id="input-prix" type="number" step="0.01" placeholder="Prix en €" required />
+      <input id="input-image" name="image" type="file"/>
+      <input id="input-marque" name="marque" placeholder="Marque" />
+      <input id="input-taille" name="taille" type="number" placeholder="Taille (ml)" />
+      <input id="input-dateAchat" name="dateAchat" type="date" placeholder="Date d'achat" />
+      <select id="input-occasions" name="occasions">
+        <option value="">-- Choisir une occasion --</option>
+        <option value="quotidien">Quotidien</option>
+        <option value="soirée">Soirée</option>
+        <option value="travail">Travail</option>
+        <option value="sport">Sport</option>
+        <option value="date">Date</option>
+      </select>
+      <button id="btn-ajouter" type="button">Ajouter</button>
+    </form>
+    <p id="msg"></p>
   </div>
+</div>
+
+<!-- ✅ Modale de détails déplacée ici -->
+<div id="modal-detail" class="modal">
+  <div class="modal-content">
+    <span class="close-detail">&times;</span>
+    <div id="contenu-detail-parfum"></div>
+  </div>
+</div>
+
 
   <footer>
     <p>&copy; 2025 Parf. Tous droits réservés.</p>

@@ -121,14 +121,15 @@ function ajouterCarteParfum(p) {
   card.appendChild(content);
   card.appendChild(btn);
 
-  card.addEventListener('click', () => afficherDetailParfum(p));
+  content.addEventListener('click', () => afficherDetailParfum(p));
 
   container.appendChild(card);
 }
 
 function afficherDetailParfum(parfum) {
-  const detail = document.getElementById('carte-detail');
-  if (!detail) return;
+  const modal = document.getElementById('modal-detail');
+  const detail = document.getElementById('contenu-detail-parfum');
+  if (!detail || !modal) return;
 
   const moyenne = parfum.notes.length
     ? (parfum.notes.reduce((a, b) => a + b.note, 0) / parfum.notes.length).toFixed(2)
@@ -151,20 +152,26 @@ function afficherDetailParfum(parfum) {
   }
 
   detail.innerHTML = `
-    <div class="detail-parfum">
-      <h2>${parfum.nom}</h2>
-      <p><strong>Description :</strong> ${parfum.description}</p>
-      <p><strong>Prix :</strong> ${parfum.prix.toFixed(2)} €</p>
-      ${parfum.marque ? `<p><strong>Marque :</strong> ${parfum.marque}</p>` : ''}
-      ${parfum.taille ? `<p><strong>Taille :</strong> ${parfum.taille} ml</p>` : ''}
-      ${parfum.dateAchat ? `<p><strong>Date d'achat :</strong> ${parfum.dateAchat}</p>` : ''}
-      ${parfum.occasions ? `<p><strong>Occasion :</strong> ${parfum.occasions}</p>` : ''}
-      <p><strong>Moyenne :</strong> ${moyenne}</p>
-      ${creerBarre("tenacite", ["médiocre", "faible", "modéré (e)", "longue tenue", "très longue tenue"])}
-      ${creerBarre("sillage", ["discret", "modéré (e)", "puissant", "énorme"])}
-    </div>
-  `;
+  <div class="detail-parfum">
+    <img src="${parfum.image}" alt="${parfum.nom}" class="detail-image" />
+    <h2>${parfum.nom}</h2>
+    <p><strong>Description :</strong> ${parfum.description}</p>
+    <p><strong>Prix :</strong> ${parfum.prix.toFixed(2)} €</p>
+    ${parfum.marque ? `<p><strong>Marque :</strong> ${parfum.marque}</p>` : ''}
+    ${parfum.taille ? `<p><strong>Taille :</strong> ${parfum.taille} ml</p>` : ''}
+    ${parfum.dateAchat ? `<p><strong>Date d'achat :</strong> ${parfum.dateAchat}</p>` : ''}
+    ${parfum.occasions ? `<p><strong>Occasion :</strong> ${parfum.occasions}</p>` : ''}
+    <p><strong>Moyenne :</strong> ${moyenne}</p>
+    ${creerBarre("tenacite", ["médiocre", "faible", "modéré (e)", "longue tenue", "très longue tenue"])}
+    ${creerBarre("sillage", ["discret", "modéré (e)", "puissant", "énorme"])}
+  </div>
+`;
 
+
+  // Afficher la modale
+  modal.style.display = 'block';
+
+  // Ajouter écouteurs sur les crans
   document.querySelectorAll('.crans .cran').forEach(cran => {
     cran.addEventListener('click', async () => {
       const parent = cran.parentElement;
@@ -182,10 +189,10 @@ function afficherDetailParfum(parfum) {
         const err = await res.json();
         alert(err.error || "Erreur lors du vote");
       }
-      
     });
   });
 }
+
 
 // === AUTHENTIFICATION ===
 function login() {
@@ -200,6 +207,15 @@ function login() {
 
 // === INITIALISATION ===
 document.addEventListener('DOMContentLoaded', () => {
+  // ✅ Gestion de la fermeture de la modale de détail
+  const btnCloseDetail = document.querySelector('.close-detail');
+  const modalDetail = document.getElementById('modal-detail');
+
+  btnCloseDetail?.addEventListener('click', () => modalDetail.style.display = 'none');
+  window.addEventListener('click', e => {
+    if (e.target === modalDetail) modalDetail.style.display = 'none';
+  });
+
   const modal = document.getElementById('modal-ajout');
   const btnOpen = document.getElementById('ouvrir-formulaire');
   const btnClose = document.querySelector('.modal .close');
@@ -217,6 +233,14 @@ document.addEventListener('DOMContentLoaded', () => {
     const taille = document.getElementById('input-taille').value.trim();
     const dateAchat = document.getElementById('input-dateAchat').value;
     const occasions = document.getElementById('input-occasions').value;
+    // Fermeture modale détail
+    const btnCloseDetail = document.querySelector('.close-detail');
+    const modalDetail = document.getElementById('modal-detail');
+
+    btnCloseDetail?.addEventListener('click', () => modalDetail.style.display = 'none');
+    window.addEventListener('click', e => {
+      if (e.target === modalDetail) modalDetail.style.display = 'none';
+    });
 
     if (!fichier) return afficherMessage("Veuillez sélectionner une image.", true);
 
@@ -254,7 +278,7 @@ document.addEventListener('DOMContentLoaded', () => {
       document.getElementById('input-note').value = '';
     }
   });
-
+  
   afficherCollection();
   majInterface();
 });
