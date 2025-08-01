@@ -1,8 +1,53 @@
+let parfumsData = [];
+let filteredParfums = [];
+let currentPage = 1;
+const itemsPerPage = 5;
+
 // === API INTERACTIONS ===
 async function chargerParfums() {
   const res = await fetch('/api/parfums');
   return await res.json();
 }
+function renderPagination(totalPages) {
+  const pagination = document.getElementById('pagination');
+  pagination.innerHTML = '';
+  for (let i = 1; i <= totalPages; i++) {
+    const btn = document.createElement('button');
+    btn.textContent = i;
+    if (i === currentPage) btn.classList.add('active');
+    btn.addEventListener('click', () => {
+      currentPage = i;
+      updateView();
+    });
+    pagination.appendChild(btn);
+  }
+}
+
+function updateView() {
+  const term = document.getElementById('search-input').value.trim().toLowerCase();
+  const occasion = document.getElementById('filter-occasions').value;
+
+  filteredParfums = parfumsData.filter(p => {
+    const matchSearch =
+      p.nom.toLowerCase().includes(term) ||
+      p.description.toLowerCase().includes(term);
+    const matchFilter = !occasion || p.occasions === occasion;
+    return matchSearch && matchFilter;
+  });
+
+  const totalPages = Math.max(1, Math.ceil(filteredParfums.length / itemsPerPage));
+  if (currentPage > totalPages) currentPage = totalPages;
+
+  const start = (currentPage - 1) * itemsPerPage;
+  const pageItems = filteredParfums.slice(start, start + itemsPerPage);
+
+  const container = document.getElementById('cards-container');
+  container.innerHTML = '';
+  pageItems.forEach(p => ajouterCarteParfum(p));  // fonction existante :contentReference[oaicite:4]{index=4}
+
+  renderPagination(totalPages);
+}
+
 
 async function ajouterParfum(nom, description, imageFile, prix, marque, taille, dateAchat, occasions) {
   const formData = new FormData();
@@ -240,27 +285,51 @@ function login() {
 }
 
 // === INITIALISATION ===
-document.addEventListener('DOMContentLoaded', () => {
-  // ✅ Gestion de la fermeture de la modale de détail
+document.addEventListener('DOMContentLoaded', async () => {
+  // 1️⃣ Hooks de fermeture des 2 modales
+  const modalDetail    = document.getElementById('modal-detail');
+  const btnCloseDetail = document.querySelector('.close-detail');
+  btnCloseDetail?.addEventListener('click', () => modalDetail.style.display = 'none');
+  window.addEventListener('click', e => {
+    if (e.target === modalDetail) modalDetail.style.display = 'none';
+  });
+
+  const modalModifier    = document.getElementById('modal-modifier');
+  const btnCloseModifier = document.querySelector('.close-modifier');
+  btnCloseModifier?.addEventListener('click', () => modalModifier.style.display = 'none');
+  window.addEventListener('click', e => {
+    if (e.target === modalModifier) modalModifier.style.display = 'none';
+  });
+
+  const modalAjout = document.getElementById('modal-ajout');
+  const btnOpenAjout = document.getElementById('ouvrir-formulaire');
+  const btnCloseAjout = document.querySelector('#modal-ajout .close');
+  btnOpenAjout?.addEventListener('click', () => modalAjout.style.display = 'block');
+  btnCloseAjout?.addEventListener('click', () => modalAjout.style.display = 'none');
+  window.addEventListener('click', e => {
+    if (e.target === modalAjout) modalAjout.style.display = 'none';
+  });
+
+  // 2️⃣ Bouton "Modifier" dans la modale d'édition
   document.getElementById('btn-modifier-parfum')?.addEventListener('click', async () => {
-    const modal = document.getElementById('modal-modifier');
-    const ancienNom = modal.dataset.oldNom;
-
+    const ancienNom = modalModifier.dataset.oldNom;
     const modifie = {
-      nom: document.getElementById('edit-nom').value.trim(),
+      nom:         document.getElementById('edit-nom').value.trim(),
       description: document.getElementById('edit-description').value.trim(),
-      prix: document.getElementById('edit-prix').value.trim(),
-      marque: document.getElementById('edit-marque').value.trim(),
-      taille: document.getElementById('edit-taille').value.trim(),
-      dateAchat: document.getElementById('edit-dateAchat').value,
-      occasions: document.getElementById('edit-occasions').value
+      prix:        document.getElementById('edit-prix').value.trim(),
+      marque:      document.getElementById('edit-marque').value.trim(),
+      taille:      document.getElementById('edit-taille').value.trim(),
+      dateAchat:   document.getElementById('edit-dateAchat').value,
+      occasions:   document.getElementById('edit-occasions').value
     };
-
     const res = await modifierParfum(ancienNom, modifie);
     if (res.ok) {
       afficherMessage("Parfum modifié !");
-      modal.style.display = 'none';
-      await afficherCollection();
+      modalModifier.style.display = 'none';
+      // on rafraîchit la vue après modif
+      parfumsData = await chargerParfums();
+      currentPage = 1;
+      updateView();
       majInterface();
     } else {
       const err = await res.json().catch(() => ({}));
@@ -268,48 +337,16 @@ document.addEventListener('DOMContentLoaded', () => {
     }
   });
 
-  // Fermeture de la modale de modification
-  const modalModifier = document.getElementById('modal-modifier');
-  const btnCloseModifier = document.querySelector('.close-modifier');
-
-  btnCloseModifier?.addEventListener('click', () => modalModifier.style.display = 'none');
-  window.addEventListener('click', e => {
-    if (e.target === modalModifier) modalModifier.style.display = 'none';
-  });
-
-  const btnCloseDetail = document.querySelector('.close-detail');
-  const modalDetail = document.getElementById('modal-detail');
-
-  btnCloseDetail?.addEventListener('click', () => modalDetail.style.display = 'none');
-  window.addEventListener('click', e => {
-    if (e.target === modalDetail) modalDetail.style.display = 'none';
-  });
-
-  const modal = document.getElementById('modal-ajout');
-  const btnOpen = document.getElementById('ouvrir-formulaire');
-  const btnClose = document.querySelector('.modal .close');
-
-  btnOpen?.addEventListener('click', () => modal.style.display = 'block');
-  btnClose?.addEventListener('click', () => modal.style.display = 'none');
-  window.addEventListener('click', e => { if (e.target === modal) modal.style.display = 'none'; });
-
+  // 3️⃣ Bouton d'ajout existant (sans redéclencher fermeture détail !)
   document.getElementById('btn-ajouter')?.addEventListener('click', async () => {
-    const nom = document.getElementById('input-produit').value.trim();
+    const nom         = document.getElementById('input-produit').value.trim();
     const description = document.getElementById('input-description').value.trim();
-    const fichier = document.getElementById('input-image').files[0];
-    const prix = document.getElementById('input-prix').value.trim();
-    const marque = document.getElementById('input-marque').value.trim();
-    const taille = document.getElementById('input-taille').value.trim();
-    const dateAchat = document.getElementById('input-dateAchat').value;
-    const occasions = document.getElementById('input-occasions').value;
-    // Fermeture modale détail
-    const btnCloseDetail = document.querySelector('.close-detail');
-    const modalDetail = document.getElementById('modal-detail');
-
-    btnCloseDetail?.addEventListener('click', () => modalDetail.style.display = 'none');
-    window.addEventListener('click', e => {
-      if (e.target === modalDetail) modalDetail.style.display = 'none';
-    });
+    const fichier     = document.getElementById('input-image').files[0];
+    const prix        = document.getElementById('input-prix').value.trim();
+    const marque      = document.getElementById('input-marque').value.trim();
+    const taille      = document.getElementById('input-taille').value.trim();
+    const dateAchat   = document.getElementById('input-dateAchat').value;
+    const occasions   = document.getElementById('input-occasions').value;
 
     if (!fichier) return afficherMessage("Veuillez sélectionner une image.", true);
 
@@ -317,28 +354,29 @@ document.addEventListener('DOMContentLoaded', () => {
       const res = await ajouterParfum(nom, description, fichier, prix, marque, taille, dateAchat, occasions);
       if (res.ok) {
         afficherMessage("Parfum ajouté !");
-        const parfums = await chargerParfums();
-        const nouveau = parfums.find(p => p.nom === nom);
-        ajouterCarteParfum(nouveau);
-        modal.style.display = 'none';
+        // on recharge uniquement la vue paginée
+        parfumsData = await chargerParfums();
+        currentPage = 1;
+        updateView();
       } else {
         const data = await res.json().catch(() => ({}));
         afficherMessage(data.error || "Erreur lors de l'ajout", true);
       }
       document.getElementById('form-ajout').reset();
+      modalAjout.style.display = 'none';
     }
   });
 
+  // 4️⃣ Notation existante
   document.getElementById('btn-noter')?.addEventListener('click', async () => {
-    const nom = document.getElementById('select-produit').value;
+    const nom       = document.getElementById('select-produit').value;
     const utilisateur = document.getElementById('input-utilisateur').value.trim();
-    const note = document.getElementById('input-note').value;
-
+    const note      = document.getElementById('input-note').value;
     if (nom && utilisateur && note) {
       const res = await noterParfum(nom, utilisateur, note);
       if (res.ok) {
         afficherMessage("Note enregistrée !");
-        await majInterface();
+        majInterface();
       } else {
         const data = await res.json().catch(() => ({}));
         afficherMessage(data.error || "Erreur lors de la notation", true);
@@ -347,7 +385,18 @@ document.addEventListener('DOMContentLoaded', () => {
       document.getElementById('input-note').value = '';
     }
   });
-  
-  afficherCollection();
+
+  // 5️⃣ Recherche, filtre & pagination
+  parfumsData = await chargerParfums();
+  currentPage = 1;
+  updateView();
+
+  document.getElementById('search-input')
+    .addEventListener('input', () => { currentPage = 1; updateView(); });
+  document.getElementById('filter-occasions')
+    .addEventListener('change', () => { currentPage = 1; updateView(); });
+
+  // 6️⃣ Classement/Select (si besoin)
   majInterface();
 });
+

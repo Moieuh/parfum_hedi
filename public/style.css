@@ -632,3 +632,47 @@ footer {
   margin: 6px 0;
   box-sizing: border-box;
 }
+
+.search-filter-container {
+  display: flex;
+  gap: 12px;
+  align-items: center;
+  margin: 20px 0 12px;
+}
+
+#search-input {
+  flex: 1;
+  padding: 8px 12px;
+}
+
+#filter-occasions {
+  width: 180px;
+  padding: 8px 12px;
+}
+
+.pagination {
+  display: flex;
+  gap: 8px;
+  justify-content: center;
+  margin: 16px 0;
+}
+
+.pagination button {
+  border: none;
+  padding: 6px 12px;
+  border-radius: 6px;
+  cursor: pointer;
+  background: #6366f1;
+  color: #fff;
+  transition: background 0.2s;
+}
+
+.pagination button.active {
+  background: #00ff75;
+  color: #23232a;
+}
+
+.pagination button:hover {
+  background: #fff;
+  color: #6366f1;
+}
