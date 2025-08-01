@@ -4,7 +4,7 @@
       "nom": "Eros energy",
       "description": "Un parfum frais et élégant pour toutes les occasions.",
       "image": "asset/ErosE.png",
-      "prix": 59.99,
+      "prix": 59.98,
       "marque": "Versace",
       "taille": "100",
       "dateAchat": "2024-06-12",
@@ -33,7 +33,7 @@
       }
     },
     {
-      "nom": "Eros flamme",
+      "nom": "Eros flame",
       "description": "xxx",
       "image": "asset/1753751652983_Eros_flamme.png",
       "prix": 0,

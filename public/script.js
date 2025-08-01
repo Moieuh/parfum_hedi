@@ -43,6 +43,15 @@ async function supprimerParfum(nom) {
   else alert((await res.json()).error || 'Erreur lors de la suppression');
 }
 
+
+async function modifierParfum(ancienNom, parfumModifie) {
+  return await fetch(`/api/parfums/${encodeURIComponent(ancienNom)}`, {
+    method: 'PUT',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify(parfumModifie)
+  });
+}
+
 // === UI UTILITAIRES ===
 function afficherMessage(msg, isError = false) {
   const msgEl = document.getElementById('msg');
@@ -122,7 +131,18 @@ function ajouterCarteParfum(p) {
   btnModifier.className = 'btn-modifier';
   btnModifier.textContent = 'Modifier ce parfum';
   btnModifier.onclick = () => {
-    alert(`Modifier parfum : ${p.nom}`); // 💡 Remplacera par une vraie modale de modification plus tard
+    const modal = document.getElementById('modal-modifier');
+    modal.style.display = 'block';
+
+    document.getElementById('edit-nom').value = p.nom;
+    document.getElementById('edit-description').value = p.description;
+    document.getElementById('edit-prix').value = p.prix;
+    document.getElementById('edit-marque').value = p.marque || '';
+    document.getElementById('edit-taille').value = p.taille || '';
+    document.getElementById('edit-dateAchat').value = p.dateAchat || '';
+    document.getElementById('edit-occasions').value = p.occasions || '';
+
+    modal.dataset.oldNom = p.nom;
   };
 
   // Conteneur des boutons
@@ -222,6 +242,41 @@ function login() {
 // === INITIALISATION ===
 document.addEventListener('DOMContentLoaded', () => {
   // ✅ Gestion de la fermeture de la modale de détail
+  document.getElementById('btn-modifier-parfum')?.addEventListener('click', async () => {
+    const modal = document.getElementById('modal-modifier');
+    const ancienNom = modal.dataset.oldNom;
+
+    const modifie = {
+      nom: document.getElementById('edit-nom').value.trim(),
+      description: document.getElementById('edit-description').value.trim(),
+      prix: document.getElementById('edit-prix').value.trim(),
+      marque: document.getElementById('edit-marque').value.trim(),
+      taille: document.getElementById('edit-taille').value.trim(),
+      dateAchat: document.getElementById('edit-dateAchat').value,
+      occasions: document.getElementById('edit-occasions').value
+    };
+
+    const res = await modifierParfum(ancienNom, modifie);
+    if (res.ok) {
+      afficherMessage("Parfum modifié !");
+      modal.style.display = 'none';
+      await afficherCollection();
+      majInterface();
+    } else {
+      const err = await res.json().catch(() => ({}));
+      alert(err.error || "Erreur lors de la modification");
+    }
+  });
+
+  // Fermeture de la modale de modification
+  const modalModifier = document.getElementById('modal-modifier');
+  const btnCloseModifier = document.querySelector('.close-modifier');
+
+  btnCloseModifier?.addEventListener('click', () => modalModifier.style.display = 'none');
+  window.addEventListener('click', e => {
+    if (e.target === modalModifier) modalModifier.style.display = 'none';
+  });
+
   const btnCloseDetail = document.querySelector('.close-detail');
   const modalDetail = document.getElementById('modal-detail');
 

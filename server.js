@@ -162,8 +162,37 @@ app.delete('/api/parfums/:nom', (req, res) => {
     res.status(404).json({ error: 'Parfum non trouvé' });
   }
 });
+// ✅ Route : Modifier un parfum existant
+app.put('/api/parfums/:ancienNom', (req, res) => {
+  const ancienNom = req.params.ancienNom;
+  const {
+    nom, description, prix, marque, taille, dateAchat, occasions
+  } = req.body;
+
+  const data = JSON.parse(fs.readFileSync(DATA_FILE));
+  const index = data.parfums.findIndex(p => p.nom === ancienNom);
+
+  if (index === -1) {
+    return res.status(404).json({ error: 'Parfum non trouvé' });
+  }
+
+  const parfum = data.parfums[index];
+
+  // Met à jour les champs
+  parfum.nom = nom;
+  parfum.description = description;
+  parfum.prix = parseFloat(prix);
+  parfum.marque = marque;
+  parfum.taille = taille;
+  parfum.dateAchat = dateAchat;
+  parfum.occasions = occasions;
+
+  fs.writeFileSync(DATA_FILE, JSON.stringify(data, null, 2));
+  res.json({ message: 'Parfum modifié', parfum });
+});
 
 // Lancer le serveur
 app.listen(3000, () => {
   console.log('Serveur en ligne : http://localhost:3000');
 });
+
