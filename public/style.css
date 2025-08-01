@@ -279,16 +279,17 @@ li {
 
 .modal-content {
   background-color: #23232a;
-  margin: 8% auto;
-  padding: 36px;
+  margin: 5% auto;
+  padding: 24px 32px;
   border: 1px solid #6366f1;
-  border-radius: 28px;
-  width: 92%;
-  max-width: 620px;
-  box-shadow: 0 8px 32px rgba(99, 102, 241, 0.28);
+  border-radius: 24px;
+  width: 90%;
+  max-width: 480px; /* Réduit de 620px */
+  box-shadow: 0 6px 24px rgba(99, 102, 241, 0.28);
   position: relative;
   animation: modalIn 0.3s;
 }
+
 @keyframes modalIn {
   from { opacity: 0; transform: translateY(40px);}
   to { opacity: 1; transform: translateY(0);}
@@ -571,7 +572,9 @@ footer {
     padding: 18px 6vw;
   }
   .modal-content {
-    padding: 16px 4vw;
+    padding: 20px;
+    width: 94%;
+    max-width: 95vw;
   }
   .btn-flottant {
     right: 12px;
@@ -585,3 +588,47 @@ footer {
 /* ===========================
   Ajout STYLES
   =========================== */
+/* Champs uniformisés pour les modales d'ajout et de modification */
+#form-ajout input,
+#form-ajout select,
+#form-modifier input,
+#form-modifier select {
+  width: 100%;
+  font-size: 0.95em;
+  padding: 10px 14px;
+  margin-bottom: 12px;
+  border-radius: 12px;
+  border: 1px solid #444;
+  box-shadow: 0 2px 6px rgba(99,102,241,0.10);
+  background: #1e1e24;
+  color: #e5e7eb;
+  transition: border-color 0.2s ease, background 0.2s ease;
+}
+
+#form-ajout input:focus,
+#form-ajout select:focus,
+#form-modifier input:focus,
+#form-modifier select:focus {
+  border-color: #00ff75;
+  background: #23232a;
+}
+
+/* Centrage des champs dans les modales */
+#form-ajout,
+#form-modifier {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+#form-ajout input,
+#form-ajout select,
+#form-ajout button,
+#form-modifier input,
+#form-modifier select,
+#form-modifier button {
+  width: 100%;
+  max-width: 400px; /* Limite la largeur */
+  margin: 6px 0;
+  box-sizing: border-box;
+}
