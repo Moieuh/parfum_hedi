@@ -18,7 +18,6 @@ body {
   letter-spacing: 0.02em;
   line-height: 1.6;
 }
-
 /* ===========================
   HEADER & NAVIGATION
   =========================== */
@@ -30,22 +29,55 @@ header {
   justify-content: space-between;
   border-bottom: 2px solid #23232a;
   box-shadow: 0 4px 16px rgba(99,102,241,0.12);
+  position: relative;
 }
 
 .logo {
-  height: 54px;
-  width: 54px;
-  margin-left: 36px;
+  height: 52px;
+  width: 52px;
+  margin-left: 42px;
   border-radius: 50%;
-  box-shadow: 0 4px 16px rgba(0,0,0,0.18);
+  box-shadow: 0 6px 24px rgba(0,0,0,0.22);
   background: #fff;
   display: flex;
   align-items: center;
   justify-content: center;
-  transition: box-shadow 0.3s;
+  transition: box-shadow 0.3s, transform 0.18s;
+  border: 2px solid #00ff75;
 }
 .logo:hover {
-  box-shadow: 0 6px 24px rgba(99,102,241,0.18);
+  box-shadow: 0 10px 32px rgba(99,102,241,0.22);
+  transform: scale(1.08) rotate(-4deg);
+  border-color: #6366f1;
+}
+
+.header-content {
+  display: flex;
+  align-items: center;
+  gap: 18px;
+}
+
+header .user-name {
+  background: rgba(35,35,42,0.85);
+  color: #a5b4fc;
+  font-weight: bold;
+  margin-left: 0;
+  font-size: 1.13em;
+  align-self: center;
+  padding: 8px 18px;
+  border-radius: 12px;
+  box-shadow: 0 2px 8px rgba(99,102,241,0.10);
+  border: 1px solid #6366f1;
+  transition: background 0.22s, color 0.22s;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+header .user-name::before {
+  content: "👤";
+  font-size: 1.1em;
+  margin-right: 6px;
+  opacity: 0.8;
 }
 
 header h1 {

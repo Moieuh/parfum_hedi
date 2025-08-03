@@ -292,6 +292,12 @@ function login() {
 
 // === INITIALISATION ===
 document.addEventListener('DOMContentLoaded', async () => {
+  // Afficher le nom d'utilisateur dans le header
+  const currentUser = localStorage.getItem("utilisateur") || "";
+  const userNameEl = document.getElementById("user-name");
+  if (userNameEl) {
+    userNameEl.textContent = currentUser;
+  }
   // 1️⃣ Hooks de fermeture des 2 modales
   const modalDetail    = document.getElementById('modal-detail');
   const btnCloseDetail = document.querySelector('.close-detail');
