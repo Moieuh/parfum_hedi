@@ -9,6 +9,7 @@
       "taille": "100",
       "dateAchat": "2024-06-12",
       "occasions": "soirée",
+      "type": "eau de toilette",
       "notes": [],
       "tenacite": {
         "médiocre": 0,
@@ -41,6 +42,7 @@
       "taille": "100",
       "dateAchat": "2024-05-01",
       "occasions": "soirée",
+      "type": "eau de parfum",
       "notes": [],
       "tenacite": {
         "médiocre": 0,

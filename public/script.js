@@ -49,7 +49,7 @@ function updateView() {
 }
 
 
-async function ajouterParfum(nom, description, imageFile, prix, marque, taille, dateAchat, occasions) {
+async function ajouterParfum(nom, description, imageFile, prix, marque, taille, dateAchat, occasions, type) {
   const formData = new FormData();
   formData.append('nom', nom);
   formData.append('description', description);
@@ -59,6 +59,7 @@ async function ajouterParfum(nom, description, imageFile, prix, marque, taille, 
   formData.append('taille', taille);
   formData.append('dateAchat', dateAchat);
   formData.append('occasions', occasions);
+  formData.append('type', type);
 
   return await fetch('/api/parfums', {
     method: 'POST',
@@ -160,7 +161,10 @@ function ajouterCarteParfum(p) {
   img.alt = 'Parfum';
 
   const info = document.createElement('div');
-  info.innerHTML = `<h2>${p.nom}</h2><p>${p.description}</p><p>Prix : ${p.prix.toFixed(2)} €</p>`;
+  info.innerHTML = `<h2>${p.nom}</h2>
+    <p>${p.description}</p>
+    <p>Prix : ${p.prix.toFixed(2)} €</p>
+    ${p.type ? `<p>Type : ${p.type}</p>` : ''}`;
 
   
   // Bouton Supprimer
@@ -186,6 +190,7 @@ function ajouterCarteParfum(p) {
     document.getElementById('edit-taille').value = p.taille || '';
     document.getElementById('edit-dateAchat').value = p.dateAchat || '';
     document.getElementById('edit-occasions').value = p.occasions || '';
+    document.getElementById('edit-type').value = p.type || '';
 
     modal.dataset.oldNom = p.nom;
   };
@@ -236,6 +241,7 @@ function afficherDetailParfum(parfum) {
     <h2>${parfum.nom}</h2>
     <p><strong>Description :</strong> ${parfum.description}</p>
     <p><strong>Prix :</strong> ${parfum.prix.toFixed(2)} €</p>
+    ${parfum.type ? `<p><strong>Type :</strong> ${parfum.type}</p>` : ''}
     ${parfum.marque ? `<p><strong>Marque :</strong> ${parfum.marque}</p>` : ''}
     ${parfum.taille ? `<p><strong>Taille :</strong> ${parfum.taille} ml</p>` : ''}
     ${parfum.dateAchat ? `<p><strong>Date d'achat :</strong> ${parfum.dateAchat}</p>` : ''}
@@ -320,7 +326,8 @@ document.addEventListener('DOMContentLoaded', async () => {
       marque:      document.getElementById('edit-marque').value.trim(),
       taille:      document.getElementById('edit-taille').value.trim(),
       dateAchat:   document.getElementById('edit-dateAchat').value,
-      occasions:   document.getElementById('edit-occasions').value
+      occasions:   document.getElementById('edit-occasions').value,
+      type:        document.getElementById('edit-type').value
     };
     const res = await modifierParfum(ancienNom, modifie);
     if (res.ok) {
@@ -347,11 +354,12 @@ document.addEventListener('DOMContentLoaded', async () => {
     const taille      = document.getElementById('input-taille').value.trim();
     const dateAchat   = document.getElementById('input-dateAchat').value;
     const occasions   = document.getElementById('input-occasions').value;
+    const type        = document.getElementById('input-type').value;
 
     if (!fichier) return afficherMessage("Veuillez sélectionner une image.", true);
 
     if (nom && description && fichier && prix) {
-      const res = await ajouterParfum(nom, description, fichier, prix, marque, taille, dateAchat, occasions);
+      const res = await ajouterParfum(nom, description, fichier, prix, marque, taille, dateAchat, occasions, type);
       if (res.ok) {
         afficherMessage("Parfum ajouté !");
         // on recharge uniquement la vue paginée

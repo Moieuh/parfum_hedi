@@ -21,7 +21,7 @@ app.get('/api/parfums', (req, res) => {
 
 // Route : Ajouter un parfum
 app.post('/api/parfums', upload.single('image'), (req, res) => {
-  const { nom, description, prix, marque, taille, dateAchat, occasions } = req.body;
+  const { nom, description, prix, marque, taille, dateAchat, occasions, type } = req.body;
   const imageFile = req.file;
 
   if (!nom || !description || !prix || !imageFile) {
@@ -45,6 +45,7 @@ app.post('/api/parfums', upload.single('image'), (req, res) => {
     taille,
     dateAchat,
     occasions,
+    type,
     notes: [],
     tenacite: {
       "médiocre": 0,
@@ -166,7 +167,7 @@ app.delete('/api/parfums/:nom', (req, res) => {
 app.put('/api/parfums/:ancienNom', (req, res) => {
   const ancienNom = req.params.ancienNom;
   const {
-    nom, description, prix, marque, taille, dateAchat, occasions
+    nom, description, prix, marque, taille, dateAchat, occasions, type
   } = req.body;
 
   const data = JSON.parse(fs.readFileSync(DATA_FILE));
@@ -186,6 +187,7 @@ app.put('/api/parfums/:ancienNom', (req, res) => {
   parfum.taille = taille;
   parfum.dateAchat = dateAchat;
   parfum.occasions = occasions;
+  parfum.type = type;
 
   fs.writeFileSync(DATA_FILE, JSON.stringify(data, null, 2));
   res.json({ message: 'Parfum modifié', parfum });
