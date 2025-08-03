@@ -474,6 +474,36 @@ li {
   border-color: #00ff75;
 }
 
+.resultat-vote {
+  margin: 16px 0 8px 0;
+}
+.resultat-vote h3 {
+  color: #00ff75;
+  margin-bottom: 7px;
+  font-size: 1.05em;
+}
+.vote-ligne {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  margin-bottom: 4px;
+}
+.vote-ligne span:first-child {
+  min-width: 120px;
+}
+.vote-ligne progress {
+  height: 12px;
+  flex: 1;
+  border-radius: 8px;
+  appearance: none;
+}
+.vote-ligne span:last-child {
+  min-width: 20px;
+  text-align: right;
+  color: #a5b4fc;
+}
+
+
 /* ===========================
   STYLES LOGIN PAGE
   =========================== */

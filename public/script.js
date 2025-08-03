@@ -45,11 +45,10 @@ function updateView() {
 
   const container = document.getElementById('cards-container');
   container.innerHTML = '';
-  pageItems.forEach(p => ajouterCarteParfum(p));  // fonction existante :contentReference[oaicite:4]{index=4}
+  pageItems.forEach(p => ajouterCarteParfum(p));
 
   renderPagination(totalPages);
 }
-
 
 async function ajouterParfum(nom, description, imageFile, prix, marque, taille, dateAchat, occasions, type) {
   const formData = new FormData();
@@ -100,7 +99,6 @@ async function supprimerParfum(nom) {
     alert(err.error || 'Erreur lors de la suppression');
   }
 }
-
 
 async function modifierParfum(ancienNom, parfumModifie) {
   const body = {
@@ -184,6 +182,22 @@ function ajouterCarteParfum(p) {
     ${p.type ? `<p>Type : ${p.type}</p>` : ''}
   `;
 
+  // Affiche la moyenne sur la carte
+  const moyenne = p.notes.length
+    ? (p.notes.reduce((a, b) => a + b.note, 0) / p.notes.length).toFixed(2)
+    : 'À venir';
+  info.innerHTML += `<p><strong>Moyenne :</strong> ${moyenne} / 10</p>`;
+
+  // Bouton "Noter"
+  const btnNote = document.createElement('button');
+  btnNote.className = 'btn-noter';
+  btnNote.textContent = 'Noter';
+  btnNote.onclick = (e) => {
+    e.stopPropagation();
+    ouvrirModaleNote(p);
+  };
+  info.appendChild(btnNote);
+
   content.appendChild(img);
   content.appendChild(info);
   card.appendChild(content);
@@ -225,16 +239,18 @@ function ajouterCarteParfum(p) {
   container.appendChild(card);
 }
 
-function afficherDetailParfum(parfum) {
-  const modal = document.getElementById('modal-detail');
-  const detail = document.getElementById('contenu-detail-parfum');
-  if (!detail || !modal) return;
+// Nouvelle fonction : Ouvre une modale pour noter et voter
+function ouvrirModaleNote(parfum) {
+  const modal = document.getElementById('modal-note');
+  const contenu = document.getElementById('note-contenu');
+  const utilisateur = localStorage.getItem("utilisateur") || "";
 
-  const moyenne = parfum.notes.length
-    ? (parfum.notes.reduce((a, b) => a + b.note, 0) / parfum.notes.length).toFixed(2)
-    : 'À venir';
-
-  const utilisateur = localStorage.getItem("utilisateur");
+  // Récupère la note de l'utilisateur courant si elle existe
+  let noteUser = '';
+  if (parfum.notes && Array.isArray(parfum.notes)) {
+    const noteTrouvee = parfum.notes.find(n => n.utilisateur === utilisateur);
+    if (noteTrouvee) noteUser = noteTrouvee.note;
+  }
 
   function creerBarre(type, labels) {
     const voteActuel = parfum.votes?.[type]?.[utilisateur] || null;
@@ -244,6 +260,86 @@ function afficherDetailParfum(parfum) {
         <div class="crans" data-type="${type}" data-utilisateur="${utilisateur}">
           ${labels.map(label => `
             <div class="cran ${voteActuel === label ? 'actif' : ''}" data-valeur="${label}">${label}</div>
+          `).join('')}
+        </div>
+      </div>
+    `;
+  }
+
+  contenu.innerHTML = `
+    <div>
+      <p><strong>${parfum.nom}</strong></p>
+      <label for="note-input">Votre note (sur 10) :</label>
+      <input id="note-input" type="number" min="0" max="10" value="${noteUser}" style="width:60px;" />
+      <button id="enregistrer-note">Enregistrer</button>
+      ${creerBarre("tenacite", ["médiocre", "faible", "modéré (e)", "longue tenue", "très longue tenue"])}
+      ${creerBarre("sillage", ["discret", "modéré (e)", "puissant", "énorme"])}
+    </div>
+  `;
+
+  // Listener pour enregistrer la note
+  contenu.querySelector('#enregistrer-note').onclick = async () => {
+    const note = contenu.querySelector('#note-input').value;
+    if (note === '' || note < 0 || note > 10) return alert('Veuillez saisir une note entre 0 et 10.');
+    const res = await noterParfum(parfum.nom, utilisateur, note);
+    if (res.ok) {
+      alert("Note enregistrée !");
+      modal.style.display = 'none';
+      parfumsData = await chargerParfums();
+      updateView();
+      majInterface();
+    } else {
+      alert('Erreur lors de la notation');
+    }
+  };
+
+  // Listeners pour crans de vote
+  contenu.querySelectorAll('.crans .cran').forEach(cran => {
+    cran.addEventListener('click', async () => {
+      const parent = cran.parentElement;
+      const type = parent.dataset.type;
+      const valeur = cran.dataset.valeur;
+      const utilisateur = parent.dataset.utilisateur;
+
+      const res = await voterParfum(parfum.nom, type, valeur, utilisateur);
+      if (res.ok) {
+        alert("Vote enregistré !");
+        modal.style.display = 'none';
+        parfumsData = await chargerParfums();
+        updateView();
+        majInterface();
+      } else {
+        alert('Erreur lors du vote');
+      }
+    });
+  });
+
+  modal.style.display = 'block';
+}
+
+// Modale détail (inchangée mais simplifiable si tu veux)
+function afficherDetailParfum(parfum) {
+  const modal = document.getElementById('modal-detail');
+  const detail = document.getElementById('contenu-detail-parfum');
+  if (!detail || !modal) return;
+
+  const moyenne = parfum.notes.length
+    ? (parfum.notes.reduce((a, b) => a + b.note, 0) / parfum.notes.length).toFixed(2)
+    : 'À venir';
+
+  // Utilitaire pour afficher les résultats des votes
+  function resultatVoteBloc(title, obj) {
+    // obj = parfum.tenacite ou parfum.sillage
+    return `
+      <div class="resultat-vote">
+        <h3>${title}</h3>
+        <div>
+          ${Object.entries(obj).map(([label, count]) => `
+            <div class="vote-ligne">
+              <span>${label} :</span>
+              <progress value="${count}" max="${Object.values(obj).reduce((a, b) => Math.max(a, b), 1)}"></progress>
+              <span>${count}</span>
+            </div>
           `).join('')}
         </div>
       </div>
@@ -261,36 +357,13 @@ function afficherDetailParfum(parfum) {
     ${parfum.taille ? `<p><strong>Taille :</strong> ${parfum.taille} ml</p>` : ''}
     ${parfum.dateAchat ? `<p><strong>Date d'achat :</strong> ${parfum.dateAchat}</p>` : ''}
     ${parfum.occasions ? `<p><strong>Occasion :</strong> ${parfum.occasions}</p>` : ''}
-    <p><strong>Moyenne :</strong> ${moyenne}</p>
-    ${creerBarre("tenacite", ["médiocre", "faible", "modéré (e)", "longue tenue", "très longue tenue"])}
-    ${creerBarre("sillage", ["discret", "modéré (e)", "puissant", "énorme"])}
+    <p><strong>Moyenne :</strong> ${moyenne} / 10</p>
+    ${resultatVoteBloc("Ténacité", parfum.tenacite)}
+    ${resultatVoteBloc("Sillage", parfum.sillage)}
   </div>
-`;
+  `;
 
-
-  // Afficher la modale
   modal.style.display = 'block';
-
-  // Ajouter écouteurs sur les crans
-  document.querySelectorAll('.crans .cran').forEach(cran => {
-    cran.addEventListener('click', async () => {
-      const parent = cran.parentElement;
-      const type = parent.dataset.type;
-      const valeur = cran.dataset.valeur;
-      const utilisateur = parent.dataset.utilisateur;
-
-      const res = await voterParfum(parfum.nom, type, valeur, utilisateur);
-      if (res.ok) {
-        const parfums = await chargerParfums();
-        const parfumMaj = parfums.find(p => p.nom === parfum.nom);
-        afficherDetailParfum(parfumMaj);
-        majInterface();
-      } else {
-        const err = await res.json();
-        alert(err.error || "Erreur lors du vote");
-      }
-    });
-  });
 }
 
 
@@ -319,7 +392,7 @@ document.addEventListener('DOMContentLoaded', async () => {
       btnOpenAjout.style.display = 'none';
     }
   }
-  // 1️⃣ Hooks de fermeture des 2 modales
+  // 1️⃣ Hooks de fermeture des 3 modales
   const modalDetail    = document.getElementById('modal-detail');
   const btnCloseDetail = document.querySelector('.close-detail');
   btnCloseDetail?.addEventListener('click', () => modalDetail.style.display = 'none');
@@ -360,7 +433,6 @@ document.addEventListener('DOMContentLoaded', async () => {
     if (res.ok) {
       afficherMessage("Parfum modifié !");
       modalModifier.style.display = 'none';
-      // on rafraîchit la vue après modif
       parfumsData = await chargerParfums();
       currentPage = 1;
       updateView();
@@ -389,7 +461,6 @@ document.addEventListener('DOMContentLoaded', async () => {
       const res = await ajouterParfum(nom, description, fichier, prix, marque, taille, dateAchat, occasions, type);
       if (res.ok) {
         afficherMessage("Parfum ajouté !");
-        // on recharge uniquement la vue paginée
         parfumsData = await chargerParfums();
         currentPage = 1;
         updateView();
@@ -402,7 +473,7 @@ document.addEventListener('DOMContentLoaded', async () => {
     }
   });
 
-  // 4️⃣ Notation existante
+  // 4️⃣ Notation existante (utilisée sur index.html, gardée pour compatibilité)
   document.getElementById('btn-noter')?.addEventListener('click', async () => {
     const nom       = document.getElementById('select-produit').value;
     const utilisateur = document.getElementById('input-utilisateur').value.trim();
@@ -433,5 +504,12 @@ document.addEventListener('DOMContentLoaded', async () => {
 
   // 6️⃣ Classement/Select (si besoin)
   majInterface();
-});
 
+  // 7️⃣ Fermeture modale de notation/vote
+  const modalNote = document.getElementById('modal-note');
+  const btnCloseNote = document.querySelector('.close-note');
+  btnCloseNote?.addEventListener('click', () => modalNote.style.display = 'none');
+  window.addEventListener('click', e => {
+    if (e.target === modalNote) modalNote.style.display = 'none';
+  });
+});
