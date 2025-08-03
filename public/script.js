@@ -2,6 +2,8 @@ let parfumsData = [];
 let filteredParfums = [];
 let currentPage = 1;
 const itemsPerPage = 5;
+// Nom de l'utilisateur courant stocké en localStorage
+const currentUser = localStorage.getItem('utilisateur') || '';
 
 // === API INTERACTIONS ===
 async function chargerParfums() {
@@ -60,6 +62,8 @@ async function ajouterParfum(nom, description, imageFile, prix, marque, taille, 
   formData.append('dateAchat', dateAchat);
   formData.append('occasions', occasions);
   formData.append('type', type);
+  // Ajouter l'utilisateur pour autorisation
+  formData.append('utilisateur', currentUser);
 
   return await fetch('/api/parfums', {
     method: 'POST',
@@ -84,17 +88,29 @@ async function voterParfum(nom, type, valeur, utilisateur) {
 }
 
 async function supprimerParfum(nom) {
-  const res = await fetch(`/api/parfums/${encodeURIComponent(nom)}`, { method: 'DELETE' });
-  if (res.ok) document.querySelector(`.card2[data-produit="${nom}"]`)?.remove();
-  else alert((await res.json()).error || 'Erreur lors de la suppression');
+  const res = await fetch(`/api/parfums/${encodeURIComponent(nom)}`, {
+    method: 'DELETE',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify({ utilisateur: currentUser })
+  });
+  if (res.ok) {
+    document.querySelector(`.card2[data-produit="${nom}"]`)?.remove();
+  } else {
+    const err = await res.json().catch(() => ({}));
+    alert(err.error || 'Erreur lors de la suppression');
+  }
 }
 
 
 async function modifierParfum(ancienNom, parfumModifie) {
+  const body = {
+    ...parfumModifie,
+    utilisateur: currentUser
+  };
   return await fetch(`/api/parfums/${encodeURIComponent(ancienNom)}`, {
     method: 'PUT',
     headers: { 'Content-Type': 'application/json' },
-    body: JSON.stringify(parfumModifie)
+    body: JSON.stringify(body)
   });
 }
 
@@ -161,52 +177,51 @@ function ajouterCarteParfum(p) {
   img.alt = 'Parfum';
 
   const info = document.createElement('div');
-  info.innerHTML = `<h2>${p.nom}</h2>
+  info.innerHTML = `
+    <h2>${p.nom}</h2>
     <p>${p.description}</p>
     <p>Prix : ${p.prix.toFixed(2)} €</p>
-    ${p.type ? `<p>Type : ${p.type}</p>` : ''}`;
-
-  
-  // Bouton Supprimer
-  const btnSupprimer = document.createElement('button');
-  btnSupprimer.className = 'btn-supprimer';
-  btnSupprimer.textContent = 'Supprimer';
-  btnSupprimer.onclick = () => {
-    if (confirm(`Supprimer le parfum "${p.nom}" ?`)) supprimerParfum(p.nom);
-  };
-
-  // Bouton Modifier
-  const btnModifier = document.createElement('button');
-  btnModifier.className = 'btn-modifier';
-  btnModifier.textContent = 'Modifier ce parfum';
-  btnModifier.onclick = () => {
-    const modal = document.getElementById('modal-modifier');
-    modal.style.display = 'block';
-
-    document.getElementById('edit-nom').value = p.nom;
-    document.getElementById('edit-description').value = p.description;
-    document.getElementById('edit-prix').value = p.prix;
-    document.getElementById('edit-marque').value = p.marque || '';
-    document.getElementById('edit-taille').value = p.taille || '';
-    document.getElementById('edit-dateAchat').value = p.dateAchat || '';
-    document.getElementById('edit-occasions').value = p.occasions || '';
-    document.getElementById('edit-type').value = p.type || '';
-
-    modal.dataset.oldNom = p.nom;
-  };
-
-  // Conteneur des boutons
-  const actions = document.createElement('div');
-  actions.className = 'card2-actions';
-  actions.appendChild(btnModifier);
-  actions.appendChild(btnSupprimer);
+    ${p.type ? `<p>Type : ${p.type}</p>` : ''}
+  `;
 
   content.appendChild(img);
   content.appendChild(info);
   card.appendChild(content);
-  card.appendChild(actions);
-  content.addEventListener('click', () => afficherDetailParfum(p));
 
+  // Actions réservées à l'utilisateur "hedi"
+  if (currentUser === 'hedi') {
+    const btnSupprimer = document.createElement('button');
+    btnSupprimer.className = 'btn-supprimer';
+    btnSupprimer.textContent = 'Supprimer';
+    btnSupprimer.onclick = () => {
+      if (confirm(`Supprimer le parfum "${p.nom}" ?`)) supprimerParfum(p.nom);
+    };
+
+    const btnModifier = document.createElement('button');
+    btnModifier.className = 'btn-modifier';
+    btnModifier.textContent = 'Modifier ce parfum';
+    btnModifier.onclick = () => {
+      const modal = document.getElementById('modal-modifier');
+      modal.style.display = 'block';
+      document.getElementById('edit-nom').value = p.nom;
+      document.getElementById('edit-description').value = p.description;
+      document.getElementById('edit-prix').value = p.prix;
+      document.getElementById('edit-marque').value = p.marque || '';
+      document.getElementById('edit-taille').value = p.taille || '';
+      document.getElementById('edit-dateAchat').value = p.dateAchat || '';
+      document.getElementById('edit-occasions').value = p.occasions || '';
+      document.getElementById('edit-type').value = p.type || '';
+      modal.dataset.oldNom = p.nom;
+    };
+
+    const actions = document.createElement('div');
+    actions.className = 'card2-actions';
+    actions.appendChild(btnModifier);
+    actions.appendChild(btnSupprimer);
+    card.appendChild(actions);
+  }
+
+  content.addEventListener('click', () => afficherDetailParfum(p));
   container.appendChild(card);
 }
 
@@ -297,6 +312,12 @@ document.addEventListener('DOMContentLoaded', async () => {
   const userNameEl = document.getElementById("user-name");
   if (userNameEl) {
     userNameEl.textContent = currentUser;
+  }
+  if (currentUser !== 'hedi') {
+    const btnOpenAjout = document.getElementById('ouvrir-formulaire');
+    if (btnOpenAjout) {
+      btnOpenAjout.style.display = 'none';
+    }
   }
   // 1️⃣ Hooks de fermeture des 2 modales
   const modalDetail    = document.getElementById('modal-detail');
