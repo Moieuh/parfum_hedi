@@ -48,7 +48,12 @@
       "dateAchat": "2024-05-01",
       "occasions": "soirée",
       "type": "eau de parfum",
-      "notes": [],
+      "notes": [
+        {
+          "utilisateur": "Ali",
+          "note": 5
+        }
+      ],
       "tenacite": {
         "médiocre": 0,
         "faible": 0,
@@ -69,6 +74,69 @@
         "sillage": {
           "Ali": "puissant"
         }
+      }
+    },
+    {
+      "nom": "test 1",
+      "description": "a",
+      "image": "asset/1754262967681_test_1.jpg",
+      "prix": 2,
+      "marque": "",
+      "taille": "",
+      "dateAchat": "",
+      "occasions": "",
+      "type": "",
+      "notes": [
+        {
+          "utilisateur": "hedi",
+          "note": 3
+        }
+      ],
+      "tenacite": {
+        "médiocre": 0,
+        "faible": 0,
+        "modéré (e)": 0,
+        "longue tenue": 0,
+        "très longue tenue": 0
+      },
+      "sillage": {
+        "discret": 0,
+        "modéré (e)": 0,
+        "puissant": 0,
+        "énorme": 0
+      },
+      "votes": {
+        "tenacite": {},
+        "sillage": {}
+      }
+    },
+    {
+      "nom": "blabla",
+      "description": "2",
+      "image": "asset/1754262985526_blabla.jpg",
+      "prix": 22,
+      "marque": "",
+      "taille": "",
+      "dateAchat": "",
+      "occasions": "",
+      "type": "",
+      "notes": [],
+      "tenacite": {
+        "médiocre": 0,
+        "faible": 0,
+        "modéré (e)": 0,
+        "longue tenue": 0,
+        "très longue tenue": 0
+      },
+      "sillage": {
+        "discret": 0,
+        "modéré (e)": 0,
+        "puissant": 0,
+        "énorme": 0
+      },
+      "votes": {
+        "tenacite": {},
+        "sillage": {}
       }
     }
   ]

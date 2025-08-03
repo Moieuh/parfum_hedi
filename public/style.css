@@ -13,11 +13,34 @@ body {
   background: linear-gradient(120deg, #23232a 60%, #6366f1 100%);
   color: #e5e7eb;
   min-height: 100vh;
-  position: relative;
-  padding-bottom: 70px;
-  letter-spacing: 0.02em;
-  line-height: 1.6;
+  display: flex;           /* Ajouté */
+  flex-direction: column;  /* Ajouté */
 }
+main {
+  max-width: 760px;
+  margin: 48px auto 0 auto;
+  background: rgba(35,35,42,0.97);
+  border-radius: 28px;
+  box-shadow: 0 8px 32px rgba(99,102,241,0.13);
+  padding: 40px 40px 28px 40px;
+  transition: box-shadow 0.3s;
+  min-height: 70vh;
+}
+main h1 {
+  color: #a5b4fc;
+  font-size: 2.2em;
+  margin-bottom: 20px;
+  text-align: center;
+  letter-spacing: 1px;
+}
+main h2 {
+  color: #00ff75;
+  margin-top: 36px;
+  margin-bottom: 14px;
+  font-size: 1.25em;
+  letter-spacing: 0.5px;
+}
+
 /* ===========================
   HEADER & NAVIGATION
   =========================== */
@@ -31,7 +54,6 @@ header {
   box-shadow: 0 4px 16px rgba(99,102,241,0.12);
   position: relative;
 }
-
 .logo {
   height: 52px;
   width: 52px;
@@ -50,13 +72,11 @@ header {
   transform: scale(1.08) rotate(-4deg);
   border-color: #6366f1;
 }
-
 .header-content {
   display: flex;
   align-items: center;
   gap: 18px;
 }
-
 header .user-name {
   background: rgba(35,35,42,0.85);
   color: #a5b4fc;
@@ -79,7 +99,6 @@ header .user-name::before {
   margin-right: 6px;
   opacity: 0.8;
 }
-
 header h1 {
   margin: 0 0 0 20px;
   color: #23232a;
@@ -88,7 +107,6 @@ header h1 {
   letter-spacing: 2.5px;
   text-shadow: 0 2px 8px rgba(99,102,241,0.08);
 }
-
 nav ul {
   list-style: none;
   display: flex;
@@ -96,7 +114,6 @@ nav ul {
   margin: 0 36px 0 0;
   padding: 0;
 }
-
 nav a {
   color: #fff;
   text-decoration: none;
@@ -116,31 +133,7 @@ nav a:hover {
 /* ===========================
   CONTENU PRINCIPAL
   =========================== */
-main {
-  max-width: 760px;
-  margin: 48px auto 0 auto;
-  background: rgba(35,35,42,0.97);
-  border-radius: 28px;
-  box-shadow: 0 8px 32px rgba(99,102,241,0.13);
-  padding: 40px 40px 28px 40px;
-  transition: box-shadow 0.3s;
-}
-
-main h1 {
-  color: #a5b4fc;
-  font-size: 2.2em;
-  margin-bottom: 20px;
-  text-align: center;
-  letter-spacing: 1px;
-}
-
-main h2 {
-  color: #00ff75;
-  margin-top: 36px;
-  margin-bottom: 14px;
-  font-size: 1.25em;
-  letter-spacing: 0.5px;
-}
+/* (Déjà inclus dans BASE ET TYPOGRAPHIE) */
 
 /* ===========================
   FORMULAIRES & BOUTONS
@@ -158,12 +151,10 @@ input, select, button {
   outline: none;
   transition: box-shadow 0.22s, background 0.22s;
 }
-
 input:focus, select:focus {
   box-shadow: 0 0 0 3px #6366f1;
   background: #23232a;
 }
-
 button {
   background: linear-gradient(90deg, #6366f1 0%, #00ff75 100%);
   color: #23232a;
@@ -179,7 +170,6 @@ button:hover {
   transform: translateY(-2px) scale(1.04);
   box-shadow: 0 4px 16px rgba(0,255,117,0.13);
 }
-
 /* Style personnalisé pour input type="file" */
 input[type="file"] {
   background: transparent;
@@ -238,7 +228,6 @@ li {
   padding-left: 0;
   width: 100%;
 }
-
 .card2 {
   width: 100%;
   box-sizing: border-box;
@@ -259,13 +248,11 @@ li {
   box-shadow: 0 8px 32px rgba(0,255,117,0.13);
   transform: translateY(-2px) scale(1.01);
 }
-
 .card2-content {
   display: flex;
   align-items: center;
   flex: 1;
 }
-
 .card2 img {
   height: 86px;
   width: 86px;
@@ -276,19 +263,16 @@ li {
   background: #fff;
   box-shadow: 0 2px 8px rgba(99,102,241,0.10);
 }
-
 .card2 h2 {
   margin: 0;
   color: #a5b4fc;
   font-size: 1.22em;
 }
-
 .card2 p {
   margin: 0;
   color: #e5e7eb;
   font-size: 1em;
 }
-
 .card2 button {
   margin-left: auto;
 }
@@ -308,7 +292,6 @@ li {
   background-color: rgba(0,0,0,0.55);
   backdrop-filter: blur(2px);
 }
-
 .modal-content {
   background-color: #23232a;
   margin: 5% auto;
@@ -316,24 +299,21 @@ li {
   border: 1px solid #6366f1;
   border-radius: 24px;
   width: 90%;
-  max-width: 480px; /* Réduit de 620px */
+  max-width: 480px;
   box-shadow: 0 6px 24px rgba(99, 102, 241, 0.28);
   position: relative;
   animation: modalIn 0.3s;
 }
-
 @keyframes modalIn {
   from { opacity: 0; transform: translateY(40px);}
   to { opacity: 1; transform: translateY(0);}
 }
-
 #contenu-detail-parfum .detail-parfum {
   padding: 0;
   background: none;
   border: none;
   box-shadow: none;
 }
-
 .detail-parfum .detail-image {
   display: block;
   max-width: 100%;
@@ -349,7 +329,6 @@ li {
   border: 2px solid #6366f1;
   background: #fff;
 }
-
 .close-detail,
 .close-modifier,
 .close {
@@ -369,12 +348,10 @@ li {
   color: #00ff75;
   transform: scale(1.15) rotate(8deg);
 }
-
 .modal-content h2 {
   text-align: center;
   color: #a5b4fc;
 }
-
 .btn-flottant {
   position: fixed;
   bottom: 36px;
@@ -410,29 +387,24 @@ li {
   border-radius: 18px;
   box-shadow: 0 2px 14px rgba(0, 0, 0, 0.22);
 }
-
 .detail-parfum h2, .detail-parfum h3 {
   color: #a5b4fc;
   margin-bottom: 10px;
 }
-
 .barre-vote {
   display: flex;
   align-items: center;
   gap: 14px;
   margin: 6px 0;
 }
-
 .barre-vote span {
   min-width: 130px;
 }
-
 .barre-vote progress {
   flex: 1;
   height: 14px;
   appearance: none;
 }
-
 .vote-clickable {
   cursor: pointer;
   transition: background 0.22s;
@@ -440,18 +412,15 @@ li {
 .vote-clickable:hover {
   background-color: rgba(255, 255, 255, 0.07);
 }
-
 .vote-bar {
   margin-top: 22px;
 }
-
 .crans {
   display: flex;
   gap: 14px;
   margin-top: 10px;
   flex-wrap: wrap;
 }
-
 .cran {
   background-color: #23232a;
   border: 2px solid #6366f1;
@@ -473,7 +442,6 @@ li {
   font-weight: bold;
   border-color: #00ff75;
 }
-
 .resultat-vote {
   margin: 16px 0 8px 0;
 }
@@ -503,7 +471,6 @@ li {
   color: #a5b4fc;
 }
 
-
 /* ===========================
   STYLES LOGIN PAGE
   =========================== */
@@ -518,7 +485,6 @@ li {
   flex-direction: column;
   align-items: center;
 }
-
 .login-container h2 {
   color: #6366f1;
   margin-bottom: 28px;
@@ -526,20 +492,17 @@ li {
   font-weight: 800;
   text-align: center;
 }
-
 .login-form {
   width: 100%;
   display: flex;
   flex-direction: column;
   gap: 20px;
 }
-
 .login-form label {
   color: #a5b4fc;
   font-weight: 500;
   margin-bottom: 8px;
 }
-
 .login-form input[type="text"]{
   background: #23232a;
   color: #e5e7eb;
@@ -553,7 +516,6 @@ li {
   border-color: #00ff75;
   background: #23232a;
 }
-
 .login-form button {
   background: linear-gradient(90deg, #6366f1 0%, #00ff75 100%);
   color: #23232a;
@@ -572,7 +534,6 @@ li {
   color: #6366f1;
   transform: translateY(-2px) scale(1.04);
 }
-
 .login-links {
   margin-top: 20px;
   text-align: center;
@@ -582,20 +543,219 @@ li {
   FOOTER
   =========================== */
 footer {
-  background: #23232a;
-  color: #a5b4fc;
+  background: linear-gradient(90deg, #6366f1 0%, #00ff75 100%);
+  color: #23232a;
   text-align: center;
-  padding: 18px 0 10px 0;
-  font-size: 1em;
-  margin-top: 36px;
-  border-top: 1px solid #6366f1;
-  box-shadow: none;
-  position: absolute;
-  left: 0;
-  bottom: 0;
+  padding: 24px 0 12px 0;
+  font-size: 0.95em;
+  margin-top: 32px;
+  border-top: 2px solid #23232a;
+  box-shadow: 0 -2px 8px rgba(99,102,241,0.08);
+  /* Supprimer position absolute/fixed et width/left/bottom/z-index */
+  position: static;
   width: 100%;
-  z-index: 100;
-  letter-spacing: 0.5px;
+}
+
+/* ===========================
+  Ajout STYLES (MODALES)
+  =========================== */
+#form-ajout input,
+#form-ajout select,
+#form-modifier input,
+#form-modifier select {
+  width: 100%;
+  font-size: 0.95em;
+  padding: 10px 14px;
+  margin-bottom: 12px;
+  border-radius: 12px;
+  border: 1px solid #444;
+  box-shadow: 0 2px 6px rgba(99,102,241,0.10);
+  background: #1e1e24;
+  color: #e5e7eb;
+  transition: border-color 0.2s ease, background 0.2s ease;
+}
+#form-ajout input:focus,
+#form-ajout select:focus,
+#form-modifier input:focus,
+#form-modifier select:focus {
+  border-color: #00ff75;
+  background: #23232a;
+}
+#form-ajout,
+#form-modifier {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+#form-ajout input,
+#form-ajout select,
+#form-ajout button,
+#form-modifier input,
+#form-modifier select,
+#form-modifier button {
+  width: 100%;
+  max-width: 400px;
+  margin: 6px 0;
+  box-sizing: border-box;
+}
+
+/* ===========================
+  SEARCH & FILTER
+  =========================== */
+.search-filter-container {
+  display: flex;
+  gap: 12px;
+  align-items: center;
+  margin: 20px 0 12px;
+}
+#search-input {
+  flex: 1;
+  padding: 8px 12px;
+}
+#filter-occasions {
+  width: 180px;
+  padding: 8px 12px;
+}
+
+/* ===========================
+  PAGINATION
+  =========================== */
+.pagination {
+  display: flex;
+  gap: 8px;
+  justify-content: center;
+  margin: 16px 0;
+}
+.pagination button {
+  border: none;
+  padding: 6px 12px;
+  border-radius: 6px;
+  cursor: pointer;
+  background: #6366f1;
+  color: #fff;
+  transition: background 0.2s;
+}
+.pagination button.active {
+  background: #00ff75;
+  color: #23232a;
+}
+.pagination button:hover {
+  background: #fff;
+  color: #6366f1;
+}
+
+/* ===========================
+  PODIUM CLASSEMENT
+  =========================== */
+.podium-container {
+  display: flex;
+  justify-content: center;
+  align-items: flex-end;
+  gap: 30px;
+  margin: 32px 0 36px 0;
+  min-height: 220px;
+}
+
+/* Aligne les 3 podiums à la même hauteur */
+.podium-place {
+  background: linear-gradient(120deg, #23232a 85%, #6366f1 100%);
+  border-radius: 22px 22px 28px 28px;
+  box-shadow: 0 6px 28px rgba(99,102,241,0.17);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: flex-end;
+  padding: 0 22px 20px 22px;
+  position: relative;
+  min-width: 160px;
+  min-height: 210px; /* Hauteur identique pour tous */
+  animation: popin 0.8s cubic-bezier(.68,-0.55,.27,1.55);
+}
+.podium-place img {
+  width: 86px;
+  height: 86px;
+  object-fit: cover;
+  border-radius: 14px;
+  margin-bottom: 10px;
+  border: 2px solid #6366f1;
+  background: #fff;
+}
+.podium-1 {
+  border: 3px solid gold;
+  z-index: 2;
+}
+.podium-2 {
+  border: 3px solid #bfc2c5;
+  z-index: 1;
+}
+.podium-3 {
+  border: 3px solid #d6a572;
+  z-index: 1;
+}
+.podium-medal {
+  font-size: 2.4em;
+  margin-top: 5px;
+  margin-bottom: 4px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+.podium-rank {
+  font-size: 1em;
+  font-weight: bold;
+  background: #23232a;
+  color: #00ff75;
+  padding: 3px 11px;
+  border-radius: 99px;
+  position: absolute;
+  right: 7px;
+  top: 10px;
+  box-shadow: 0 1px 6px rgba(99,102,241,0.14);
+  z-index: 10;
+  opacity: 0.94;
+  border: 2px solid #6366f1;
+}
+.podium-name {
+  color: #a5b4fc;
+  font-size: 1.14em;
+  font-weight: bold;
+  margin-bottom: 4px;
+  text-align: center;
+}
+.podium-moyenne {
+  color: #00ff75;
+  font-size: 1.08em;
+  font-weight: bold;
+  margin-bottom: 0;
+}
+
+/* ===========================
+  TABLEAU CLASSEMENT
+  =========================== */
+.ranking-table {
+  width: 100%;
+  border-collapse: collapse;
+  background: #23232a;
+  margin-top: 16px;
+  border-radius: 18px;
+  overflow: hidden;
+  box-shadow: 0 2px 14px rgba(99,102,241,0.09);
+}
+.ranking-table th, .ranking-table td {
+  padding: 14px 10px;
+  text-align: center;
+}
+.ranking-table th {
+  color: #00ff75;
+  background: #181825;
+  font-size: 1.1em;
+  border-bottom: 1.5px solid #6366f1;
+}
+.ranking-table tr:nth-child(even) {
+  background: rgba(99,102,241,0.07);
+}
+.ranking-table tr:hover {
+  background: rgba(0,255,117,0.09);
 }
 
 /* ===========================
@@ -625,7 +785,23 @@ footer {
     margin-right: 0;
   }
 }
-
+@media (max-width: 800px) {
+  .podium-container {
+    flex-direction: column;
+    align-items: center;
+    gap: 10px;
+    min-height: unset;
+  }
+  .podium-place {
+    min-width: 98vw;
+    min-height: 110px;
+    max-width: 440px;
+    padding: 12px 0 18px 0;
+  }
+  .podium-place img { width: 70px; height: 70px; }
+  .podium-medal { font-size: 1.7em; }
+  .podium-rank { font-size: 0.98em; padding: 2px 8px;}
+}
 @media (max-width: 600px) {
   main {
     padding: 8px 2vw;
@@ -648,93 +824,9 @@ footer {
 }
 
 /* ===========================
-  Ajout STYLES
+  ANIMATIONS
   =========================== */
-/* Champs uniformisés pour les modales d'ajout et de modification */
-#form-ajout input,
-#form-ajout select,
-#form-modifier input,
-#form-modifier select {
-  width: 100%;
-  font-size: 0.95em;
-  padding: 10px 14px;
-  margin-bottom: 12px;
-  border-radius: 12px;
-  border: 1px solid #444;
-  box-shadow: 0 2px 6px rgba(99,102,241,0.10);
-  background: #1e1e24;
-  color: #e5e7eb;
-  transition: border-color 0.2s ease, background 0.2s ease;
-}
-
-#form-ajout input:focus,
-#form-ajout select:focus,
-#form-modifier input:focus,
-#form-modifier select:focus {
-  border-color: #00ff75;
-  background: #23232a;
-}
-
-/* Centrage des champs dans les modales */
-#form-ajout,
-#form-modifier {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-}
-
-#form-ajout input,
-#form-ajout select,
-#form-ajout button,
-#form-modifier input,
-#form-modifier select,
-#form-modifier button {
-  width: 100%;
-  max-width: 400px; /* Limite la largeur */
-  margin: 6px 0;
-  box-sizing: border-box;
-}
-
-.search-filter-container {
-  display: flex;
-  gap: 12px;
-  align-items: center;
-  margin: 20px 0 12px;
-}
-
-#search-input {
-  flex: 1;
-  padding: 8px 12px;
-}
-
-#filter-occasions {
-  width: 180px;
-  padding: 8px 12px;
-}
-
-.pagination {
-  display: flex;
-  gap: 8px;
-  justify-content: center;
-  margin: 16px 0;
-}
-
-.pagination button {
-  border: none;
-  padding: 6px 12px;
-  border-radius: 6px;
-  cursor: pointer;
-  background: #6366f1;
-  color: #fff;
-  transition: background 0.2s;
-}
-
-.pagination button.active {
-  background: #00ff75;
-  color: #23232a;
-}
-
-.pagination button:hover {
-  background: #fff;
-  color: #6366f1;
+@keyframes popin {
+  from { opacity: 0; transform: translateY(30px) scale(0.7);}
+  to { opacity: 1; transform: translateY(0) scale(1);}
 }

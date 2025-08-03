@@ -1,17 +1,192 @@
+// ==========================
+// PARTIE CLASSEMENT / PODIUM
+// ==========================
+
+// Fonction utilitaire pour calculer la moyenne
+function getMoyenne(notes) {
+  if (!notes || !notes.length) return null;
+  const total = notes.reduce((a, b) => a + (typeof b.note === 'number' ? b.note : 0), 0);
+  return total / notes.length;
+}
+
+// Médailles
+function getMedal(rank) {
+  return rank === 1 ? '🥇' : rank === 2 ? '🥈' : rank === 3 ? '🥉' : '';
+}
+
+// Rendu du podium (TOP 3)
+function afficherPodium(parfums) {
+  const podiumSection = document.getElementById('podium-section');
+  const classement = parfums
+    .map(p => ({...p, moyenne: getMoyenne(p.notes)}))
+    .filter(p => p.moyenne !== null)
+    .sort((a, b) => b.moyenne - a.moyenne || a.nom.localeCompare(b.nom));
+
+  const podium = classement.slice(0, 3);
+
+  podiumSection.innerHTML = `
+    <div class="podium-container">
+      ${[1,2,3].map(i => {
+        const p = podium[i-1];
+        return p ? `
+          <div class="podium-place podium-${i}" data-nom-parfum="${encodeURIComponent(p.nom)}" style="cursor:pointer;">
+            <span class="podium-medal">${getMedal(i)}</span>
+            <span class="podium-rank">${i}</span>
+            <img src="${p.image}" alt="${p.nom}" />
+            <div class="podium-name">${p.nom}</div>
+            <div class="podium-moyenne">${p.moyenne.toFixed(2)} / 10</div>
+          </div>
+        ` : `<div class="podium-place podium-${i}" style="opacity:0.5;">
+              <span class="podium-medal">${getMedal(i)}</span>
+              <span class="podium-rank">${i}</span>
+            </div>`;
+      }).join('')}
+    </div>
+  `;
+
+  // Clic sur podium => détail modale
+  document.querySelectorAll('.podium-place[data-nom-parfum]').forEach(div => {
+    div.addEventListener('click', () => {
+      const nom = decodeURIComponent(div.getAttribute('data-nom-parfum'));
+      const parfum = podium.find(p => p.nom === nom);
+      if (parfum) afficherDetailParfum(parfum);
+    });
+  });
+}
+
+// Rendu du tableau classement complet
+function afficherClassementTable(parfums) {
+  const classementListe = document.getElementById('classement-liste');
+  const classement = parfums
+    .map(p => ({...p, moyenne: getMoyenne(p.notes)}))
+    .sort((a, b) => {
+      if ((b.moyenne ?? -1) !== (a.moyenne ?? -1)) return (b.moyenne ?? -1) - (a.moyenne ?? -1);
+      return a.nom.localeCompare(b.nom);
+    });
+
+  classementListe.innerHTML = `
+    <table class="ranking-table">
+      <thead>
+        <tr>
+          <th>Rang</th>
+          <th>Parfum</th>
+          <th>Moyenne</th>
+          <th>Type</th>
+          <th>Marque</th>
+        </tr>
+      </thead>
+      <tbody>
+        ${classement.map((p, idx) => `
+          <tr ${idx < 3 ? 'style="opacity:0.4;"' : ''}>
+            <td>${idx+1}</td>
+            <td>${p.nom}</td>
+            <td>${p.moyenne !== null ? p.moyenne.toFixed(2)+' / 10' : 'Pas de note'}</td>
+            <td>${p.type || ''}</td>
+            <td>${p.marque || ''}</td>
+          </tr>
+        `).join('')}
+      </tbody>
+    </table>
+  `;
+}
+
+// Affichage classement si page index.html (présence du podium)
+function afficherClassementPage() {
+  // Affiche le nom d'utilisateur dans le header
+  const currentUser = localStorage.getItem("utilisateur") || "";
+  const userNameEl = document.getElementById("user-name");
+  if (userNameEl) userNameEl.textContent = currentUser;
+
+  fetch('/api/parfums')
+    .then(res => res.json())
+    .then(parfums => {
+      afficherPodium(parfums);
+      afficherClassementTable(parfums);
+    });
+}
+
+if (document.getElementById('podium-section')) {
+  document.addEventListener('DOMContentLoaded', afficherClassementPage);
+}
+
+// ==========================
+// MODALE DETAIL PARTAGÉE
+// ==========================
+function afficherDetailParfum(parfum) {
+  const modal = document.getElementById('modal-detail');
+  const detail = document.getElementById('contenu-detail-parfum');
+  if (!detail || !modal) return;
+
+  const moyenne = parfum.notes.length
+    ? (parfum.notes.reduce((a, b) => a + b.note, 0) / parfum.notes.length).toFixed(2)
+    : 'À venir';
+
+  function resultatVoteBloc(title, obj) {
+    return `
+      <div class="resultat-vote">
+        <h3>${title}</h3>
+        <div>
+          ${Object.entries(obj).map(([label, count]) => `
+            <div class="vote-ligne">
+              <span>${label} :</span>
+              <progress value="${count}" max="${Object.values(obj).reduce((a, b) => Math.max(a, b), 1)}"></progress>
+              <span>${count}</span>
+            </div>
+          `).join('')}
+        </div>
+      </div>
+    `;
+  }
+
+  detail.innerHTML = `
+  <div class="detail-parfum">
+    <img src="${parfum.image}" alt="${parfum.nom}" class="detail-image" />
+    <h2>${parfum.nom}</h2>
+    <p><strong>Description :</strong> ${parfum.description}</p>
+    <p><strong>Prix :</strong> ${parfum.prix.toFixed(2)} €</p>
+    ${parfum.type ? `<p><strong>Type :</strong> ${parfum.type}</p>` : ''}
+    ${parfum.marque ? `<p><strong>Marque :</strong> ${parfum.marque}</p>` : ''}
+    ${parfum.taille ? `<p><strong>Taille :</strong> ${parfum.taille} ml</p>` : ''}
+    ${parfum.dateAchat ? `<p><strong>Date d'achat :</strong> ${parfum.dateAchat}</p>` : ''}
+    ${parfum.occasions ? `<p><strong>Occasion :</strong> ${parfum.occasions}</p>` : ''}
+    <p><strong>Moyenne :</strong> ${moyenne} / 10</p>
+    ${resultatVoteBloc("Ténacité", parfum.tenacite)}
+    ${resultatVoteBloc("Sillage", parfum.sillage)}
+  </div>
+  `;
+
+  modal.style.display = 'block';
+}
+
+// ==========================
+// FERMETURE DE LA MODALE DETAIL PARTAGÉE (toujours présent)
+// ==========================
+document.addEventListener('DOMContentLoaded', () => {
+  const modalDetail = document.getElementById('modal-detail');
+  const btnCloseDetail = document.querySelector('.close-detail');
+  btnCloseDetail?.addEventListener('click', () => modalDetail.style.display = 'none');
+  window.addEventListener('click', e => {
+    if (e.target === modalDetail) modalDetail.style.display = 'none';
+  });
+});
+
+// ==========================
+// PARTIE COLLECTION
+// ==========================
 let parfumsData = [];
 let filteredParfums = [];
 let currentPage = 1;
 const itemsPerPage = 5;
-// Nom de l'utilisateur courant stocké en localStorage
 const currentUser = localStorage.getItem('utilisateur') || '';
 
-// === API INTERACTIONS ===
 async function chargerParfums() {
   const res = await fetch('/api/parfums');
   return await res.json();
 }
+
 function renderPagination(totalPages) {
   const pagination = document.getElementById('pagination');
+  if (!pagination) return;
   pagination.innerHTML = '';
   for (let i = 1; i <= totalPages; i++) {
     const btn = document.createElement('button');
@@ -26,8 +201,8 @@ function renderPagination(totalPages) {
 }
 
 function updateView() {
-  const term = document.getElementById('search-input').value.trim().toLowerCase();
-  const occasion = document.getElementById('filter-occasions').value;
+  const term = document.getElementById('search-input')?.value.trim().toLowerCase() || '';
+  const occasion = document.getElementById('filter-occasions')?.value || '';
 
   filteredParfums = parfumsData.filter(p => {
     const matchSearch =
@@ -44,6 +219,7 @@ function updateView() {
   const pageItems = filteredParfums.slice(start, start + itemsPerPage);
 
   const container = document.getElementById('cards-container');
+  if (!container) return;
   container.innerHTML = '';
   pageItems.forEach(p => ajouterCarteParfum(p));
 
@@ -61,7 +237,6 @@ async function ajouterParfum(nom, description, imageFile, prix, marque, taille, 
   formData.append('dateAchat', dateAchat);
   formData.append('occasions', occasions);
   formData.append('type', type);
-  // Ajouter l'utilisateur pour autorisation
   formData.append('utilisateur', currentUser);
 
   return await fetch('/api/parfums', {
@@ -112,7 +287,6 @@ async function modifierParfum(ancienNom, parfumModifie) {
   });
 }
 
-// === UI UTILITAIRES ===
 function afficherMessage(msg, isError = false) {
   const msgEl = document.getElementById('msg');
   if (msgEl) {
@@ -121,7 +295,6 @@ function afficherMessage(msg, isError = false) {
   }
 }
 
-// === UI MISE À JOUR ===
 async function majInterface() {
   const parfums = await chargerParfums();
   const select = document.getElementById('select-produit');
@@ -182,13 +355,11 @@ function ajouterCarteParfum(p) {
     ${p.type ? `<p>Type : ${p.type}</p>` : ''}
   `;
 
-  // Affiche la moyenne sur la carte
   const moyenne = p.notes.length
     ? (p.notes.reduce((a, b) => a + b.note, 0) / p.notes.length).toFixed(2)
     : 'À venir';
   info.innerHTML += `<p><strong>Moyenne :</strong> ${moyenne} / 10</p>`;
 
-  // Bouton "Noter"
   const btnNote = document.createElement('button');
   btnNote.className = 'btn-noter';
   btnNote.textContent = 'Noter';
@@ -202,7 +373,6 @@ function ajouterCarteParfum(p) {
   content.appendChild(info);
   card.appendChild(content);
 
-  // Actions réservées à l'utilisateur "hedi"
   if (currentUser === 'hedi') {
     const btnSupprimer = document.createElement('button');
     btnSupprimer.className = 'btn-supprimer';
@@ -239,13 +409,11 @@ function ajouterCarteParfum(p) {
   container.appendChild(card);
 }
 
-// Nouvelle fonction : Ouvre une modale pour noter et voter
 function ouvrirModaleNote(parfum) {
   const modal = document.getElementById('modal-note');
   const contenu = document.getElementById('note-contenu');
   const utilisateur = localStorage.getItem("utilisateur") || "";
 
-  // Récupère la note de l'utilisateur courant si elle existe
   let noteUser = '';
   if (parfum.notes && Array.isArray(parfum.notes)) {
     const noteTrouvee = parfum.notes.find(n => n.utilisateur === utilisateur);
@@ -277,7 +445,6 @@ function ouvrirModaleNote(parfum) {
     </div>
   `;
 
-  // Listener pour enregistrer la note
   contenu.querySelector('#enregistrer-note').onclick = async () => {
     const note = contenu.querySelector('#note-input').value;
     if (note === '' || note < 0 || note > 10) return alert('Veuillez saisir une note entre 0 et 10.');
@@ -293,7 +460,6 @@ function ouvrirModaleNote(parfum) {
     }
   };
 
-  // Listeners pour crans de vote
   contenu.querySelectorAll('.crans .cran').forEach(cran => {
     cran.addEventListener('click', async () => {
       const parent = cran.parentElement;
@@ -317,57 +483,6 @@ function ouvrirModaleNote(parfum) {
   modal.style.display = 'block';
 }
 
-// Modale détail (inchangée mais simplifiable si tu veux)
-function afficherDetailParfum(parfum) {
-  const modal = document.getElementById('modal-detail');
-  const detail = document.getElementById('contenu-detail-parfum');
-  if (!detail || !modal) return;
-
-  const moyenne = parfum.notes.length
-    ? (parfum.notes.reduce((a, b) => a + b.note, 0) / parfum.notes.length).toFixed(2)
-    : 'À venir';
-
-  // Utilitaire pour afficher les résultats des votes
-  function resultatVoteBloc(title, obj) {
-    // obj = parfum.tenacite ou parfum.sillage
-    return `
-      <div class="resultat-vote">
-        <h3>${title}</h3>
-        <div>
-          ${Object.entries(obj).map(([label, count]) => `
-            <div class="vote-ligne">
-              <span>${label} :</span>
-              <progress value="${count}" max="${Object.values(obj).reduce((a, b) => Math.max(a, b), 1)}"></progress>
-              <span>${count}</span>
-            </div>
-          `).join('')}
-        </div>
-      </div>
-    `;
-  }
-
-  detail.innerHTML = `
-  <div class="detail-parfum">
-    <img src="${parfum.image}" alt="${parfum.nom}" class="detail-image" />
-    <h2>${parfum.nom}</h2>
-    <p><strong>Description :</strong> ${parfum.description}</p>
-    <p><strong>Prix :</strong> ${parfum.prix.toFixed(2)} €</p>
-    ${parfum.type ? `<p><strong>Type :</strong> ${parfum.type}</p>` : ''}
-    ${parfum.marque ? `<p><strong>Marque :</strong> ${parfum.marque}</p>` : ''}
-    ${parfum.taille ? `<p><strong>Taille :</strong> ${parfum.taille} ml</p>` : ''}
-    ${parfum.dateAchat ? `<p><strong>Date d'achat :</strong> ${parfum.dateAchat}</p>` : ''}
-    ${parfum.occasions ? `<p><strong>Occasion :</strong> ${parfum.occasions}</p>` : ''}
-    <p><strong>Moyenne :</strong> ${moyenne} / 10</p>
-    ${resultatVoteBloc("Ténacité", parfum.tenacite)}
-    ${resultatVoteBloc("Sillage", parfum.sillage)}
-  </div>
-  `;
-
-  modal.style.display = 'block';
-}
-
-
-// === AUTHENTIFICATION ===
 function login() {
   const username = document.getElementById('username').value.trim();
   if (username) {
@@ -378,29 +493,27 @@ function login() {
   }
 }
 
-// === INITIALISATION ===
+// ==========================
+// INITIALISATION
+// ==========================
 document.addEventListener('DOMContentLoaded', async () => {
-  // Afficher le nom d'utilisateur dans le header
   const currentUser = localStorage.getItem("utilisateur") || "";
   const userNameEl = document.getElementById("user-name");
-  if (userNameEl) {
-    userNameEl.textContent = currentUser;
-  }
+  if (userNameEl) userNameEl.textContent = currentUser;
+
   if (currentUser !== 'hedi') {
     const btnOpenAjout = document.getElementById('ouvrir-formulaire');
-    if (btnOpenAjout) {
-      btnOpenAjout.style.display = 'none';
-    }
+    if (btnOpenAjout) btnOpenAjout.style.display = 'none';
   }
-  // 1️⃣ Hooks de fermeture des 3 modales
-  const modalDetail    = document.getElementById('modal-detail');
+
+  const modalDetail = document.getElementById('modal-detail');
   const btnCloseDetail = document.querySelector('.close-detail');
   btnCloseDetail?.addEventListener('click', () => modalDetail.style.display = 'none');
   window.addEventListener('click', e => {
     if (e.target === modalDetail) modalDetail.style.display = 'none';
   });
 
-  const modalModifier    = document.getElementById('modal-modifier');
+  const modalModifier = document.getElementById('modal-modifier');
   const btnCloseModifier = document.querySelector('.close-modifier');
   btnCloseModifier?.addEventListener('click', () => modalModifier.style.display = 'none');
   window.addEventListener('click', e => {
@@ -416,7 +529,6 @@ document.addEventListener('DOMContentLoaded', async () => {
     if (e.target === modalAjout) modalAjout.style.display = 'none';
   });
 
-  // 2️⃣ Bouton "Modifier" dans la modale d'édition
   document.getElementById('btn-modifier-parfum')?.addEventListener('click', async () => {
     const ancienNom = modalModifier.dataset.oldNom;
     const modifie = {
@@ -443,7 +555,6 @@ document.addEventListener('DOMContentLoaded', async () => {
     }
   });
 
-  // 3️⃣ Bouton d'ajout existant (sans redéclencher fermeture détail !)
   document.getElementById('btn-ajouter')?.addEventListener('click', async () => {
     const nom         = document.getElementById('input-produit').value.trim();
     const description = document.getElementById('input-description').value.trim();
@@ -473,7 +584,6 @@ document.addEventListener('DOMContentLoaded', async () => {
     }
   });
 
-  // 4️⃣ Notation existante (utilisée sur index.html, gardée pour compatibilité)
   document.getElementById('btn-noter')?.addEventListener('click', async () => {
     const nom       = document.getElementById('select-produit').value;
     const utilisateur = document.getElementById('input-utilisateur').value.trim();
@@ -492,20 +602,17 @@ document.addEventListener('DOMContentLoaded', async () => {
     }
   });
 
-  // 5️⃣ Recherche, filtre & pagination
   parfumsData = await chargerParfums();
   currentPage = 1;
   updateView();
 
   document.getElementById('search-input')
-    .addEventListener('input', () => { currentPage = 1; updateView(); });
+    ?.addEventListener('input', () => { currentPage = 1; updateView(); });
   document.getElementById('filter-occasions')
-    .addEventListener('change', () => { currentPage = 1; updateView(); });
+    ?.addEventListener('change', () => { currentPage = 1; updateView(); });
 
-  // 6️⃣ Classement/Select (si besoin)
   majInterface();
 
-  // 7️⃣ Fermeture modale de notation/vote
   const modalNote = document.getElementById('modal-note');
   const btnCloseNote = document.querySelector('.close-note');
   btnCloseNote?.addEventListener('click', () => modalNote.style.display = 'none');
