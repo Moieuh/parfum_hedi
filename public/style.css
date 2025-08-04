@@ -107,27 +107,21 @@ header h1 {
   letter-spacing: 2.5px;
   text-shadow: 0 2px 8px rgba(99,102,241,0.08);
 }
-nav ul {
-  list-style: none;
-  display: flex;
-  gap: 36px;
-  margin: 0 36px 0 0;
-  padding: 0;
-}
+nav ul { list-style: none; display: flex; gap: 36px; margin: 0 36px 0 0; padding: 0; }
 nav a {
   color: #fff;
   text-decoration: none;
   font-weight: bold;
-  font-size: 1.13em;
-  padding: 10px 22px;
-  border-radius: 10px;
-  transition: background 0.25s, color 0.25s, box-shadow 0.25s;
+  font-size: 1.11em;
+  padding: 11px 24px;
+  border-radius: 11px;
+  transition: all 0.22s;
   box-shadow: 0 2px 8px rgba(99,102,241,0.06);
 }
 nav a:hover {
-  background: #fff;
-  color: #6366f1;
-  box-shadow: 0 4px 16px rgba(0,255,117,0.10);
+  background: #1699c9; color: var(--accent);
+  box-shadow: 0 4px 10px rgba(0,255,117,0.14);
+  transform: scale(1.07);
 }
 
 /* ===========================

@@ -1,0 +1,91 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8" />
+  <title>Futurs achats - Parfums</title>
+  <script src="script.js" defer></script>
+  <link rel="stylesheet" href="style.css" />
+</head>
+<body>
+  <header>
+    <a href="index.html" class="logo" title="Accueil">
+      <svg width="32" height="32" viewBox="0 0 32 32" fill="none">
+        <circle cx="16" cy="16" r="15" stroke="#6366f1" stroke-width="2" fill="#fff"/>
+        <path d="M16 10v8M16 18l-4 4M16 18l4 4" stroke="#00ff75" stroke-width="2" stroke-linecap="round"/>
+      </svg>
+    </a>
+    <nav>
+      <ul>
+        <li><a href="index.html">Accueil</a></li>
+        <li><a href="collection.html">Collection</a></li>
+        <li><a href="futurs-achats.html">Futurs achats</a></li>
+        <li><a href="Login.html">Changer d'utilisateur</a></li>
+      </ul>
+    </nav>
+    <span id="user-name" class="user-name"></span>
+  </header>
+  <main>
+    <h1>Futurs achats de parfums</h1>
+    <form id="ajout-futur-achat" style="margin-bottom:18px;">
+      <input type="text" id="futur-nom" placeholder="Nom du parfum" required />
+      <input type="text" id="futur-marque" placeholder="Marque" />
+      <input type="number" id="futur-prix" placeholder="Prix estimé (€)" min="0" step="0.01"/>
+      <button type="submit">Ajouter à la liste</button>
+    </form>
+    <ul id="liste-futurs-achats"></ul>
+  </main>
+  <footer>
+    <p>&copy; 2025 Parf. Tous droits réservés.</p>
+  </footer>
+  <script>
+    // --- GESTION FUTURS ACHATS EN LOCALSTORAGE ---
+    function getFutursAchats() {
+      return JSON.parse(localStorage.getItem('futursAchats') || '[]');
+    }
+    function setFutursAchats(list) {
+      localStorage.setItem('futursAchats', JSON.stringify(list));
+    }
+    function afficherFutursAchats() {
+      const liste = getFutursAchats();
+      const ul = document.getElementById('liste-futurs-achats');
+      ul.innerHTML = '';
+      liste.forEach((item, idx) => {
+        const li = document.createElement('li');
+        li.innerHTML = `
+          <strong>${item.nom}</strong>
+          ${item.marque ? '('+item.marque+')' : ''} 
+          ${item.prix ? '- '+item.prix+' €' : ''} 
+          <button onclick="supprimerFuturAchat(${idx})" style="margin-left:18px;">❌</button>
+        `;
+        ul.appendChild(li);
+      });
+    }
+    function supprimerFuturAchat(idx) {
+      const liste = getFutursAchats();
+      liste.splice(idx,1);
+      setFutursAchats(liste);
+      afficherFutursAchats();
+    }
+    document.getElementById('ajout-futur-achat').onsubmit = function(e) {
+      e.preventDefault();
+      const nom = document.getElementById('futur-nom').value.trim();
+      const marque = document.getElementById('futur-marque').value.trim();
+      const prix = document.getElementById('futur-prix').value.trim();
+      if (!nom) return;
+      const liste = getFutursAchats();
+      liste.push({ nom, marque, prix });
+      setFutursAchats(liste);
+      afficherFutursAchats();
+      this.reset();
+    };
+    // Affichage user
+    document.addEventListener('DOMContentLoaded', () => {
+      const user = localStorage.getItem('utilisateur') || '';
+      document.getElementById('user-name').textContent = user;
+      afficherFutursAchats();
+    });
+    // Pour que le bouton fonctionne après suppressions
+    window.supprimerFuturAchat = supprimerFuturAchat;
+  </script>
+</body>
+</html>
