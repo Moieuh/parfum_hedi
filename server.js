@@ -7,6 +7,10 @@ const app = express();
 const DATA_FILE = path.join(__dirname, 'data.json');
 
 app.use(express.json({ limit: '2mb' }));
+app.get('/', (req, res) => {
+  res.sendFile(path.join(__dirname, 'public', 'Login.html'));
+});
+
 app.use(express.static(path.join(__dirname, 'public')));
 
 const upload = multer({
