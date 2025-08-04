@@ -1,26 +1,47 @@
 // ==========================
-// PARTIE CLASSEMENT / PODIUM
+// UTILS CLASSEMENT PAR UTILISATEUR
 // ==========================
 
-// Fonction utilitaire pour calculer la moyenne
+// Récupérer tous les utilisateurs ayant noté au moins un parfum
+function getAllUtilisateurs(parfums) {
+  const set = new Set();
+  parfums.forEach(p => {
+    if (Array.isArray(p.notes)) p.notes.forEach(note => set.add(note.utilisateur));
+  });
+  return Array.from(set).sort();
+}
+
 function getMoyenne(notes) {
   if (!notes || !notes.length) return null;
   const total = notes.reduce((a, b) => a + (typeof b.note === 'number' ? b.note : 0), 0);
   return total / notes.length;
 }
 
-// Médailles
+function getMoyenneUser(notes, utilisateur) {
+  if (!notes || !notes.length) return null;
+  if (!utilisateur || utilisateur === '__ALL__') return getMoyenne(notes);
+  const notesUser = notes.filter(n => n.utilisateur === utilisateur);
+  if (!notesUser.length) return null;
+  const total = notesUser.reduce((a, b) => a + (typeof b.note === 'number' ? b.note : 0), 0);
+  return total / notesUser.length;
+}
+
 function getMedal(rank) {
   return rank === 1 ? '🥇' : rank === 2 ? '🥈' : rank === 3 ? '🥉' : '';
 }
 
-// Rendu du podium (TOP 3)
-function afficherPodium(parfums) {
+// Affichage du podium, selon l'utilisateur choisi
+function afficherPodium(parfums, utilisateur) {
   const podiumSection = document.getElementById('podium-section');
   const classement = parfums
-    .map(p => ({...p, moyenne: getMoyenne(p.notes)}))
+    .map(p => ({...p, moyenne: getMoyenneUser(p.notes, utilisateur)}))
     .filter(p => p.moyenne !== null)
     .sort((a, b) => b.moyenne - a.moyenne || a.nom.localeCompare(b.nom));
+
+  if (classement.length === 0) {
+    podiumSection.innerHTML = `<div style="text-align:center; color:#a5b4fc; font-size:1.2em; margin-top:32px;">Aucun classement pour cet utilisateur</div>`;
+    return;
+  }
 
   const podium = classement.slice(0, 3);
 
@@ -54,15 +75,21 @@ function afficherPodium(parfums) {
   });
 }
 
-// Rendu du tableau classement complet
-function afficherClassementTable(parfums) {
+// Affichage du tableau classement complet selon utilisateur choisi
+function afficherClassementTable(parfums, utilisateur) {
   const classementListe = document.getElementById('classement-liste');
   const classement = parfums
-    .map(p => ({...p, moyenne: getMoyenne(p.notes)}))
+    .map(p => ({...p, moyenne: getMoyenneUser(p.notes, utilisateur)}))
+    .filter(p => p.moyenne !== null)
     .sort((a, b) => {
       if ((b.moyenne ?? -1) !== (a.moyenne ?? -1)) return (b.moyenne ?? -1) - (a.moyenne ?? -1);
       return a.nom.localeCompare(b.nom);
     });
+
+  if (classement.length === 0) {
+    classementListe.innerHTML = `<div style="text-align:center; color:#a5b4fc; font-size:1.2em; margin-top:32px;">Aucun classement pour cet utilisateur</div>`;
+    return;
+  }
 
   classementListe.innerHTML = `
     <table class="ranking-table">
@@ -90,9 +117,8 @@ function afficherClassementTable(parfums) {
   `;
 }
 
-// Affichage classement si page index.html (présence du podium)
+// Initialisation et gestion du select utilisateur
 function afficherClassementPage() {
-  // Affiche le nom d'utilisateur dans le header
   const currentUser = localStorage.getItem("utilisateur") || "";
   const userNameEl = document.getElementById("user-name");
   if (userNameEl) userNameEl.textContent = currentUser;
@@ -100,8 +126,27 @@ function afficherClassementPage() {
   fetch('/api/parfums')
     .then(res => res.json())
     .then(parfums => {
-      afficherPodium(parfums);
-      afficherClassementTable(parfums);
+      // Génère la liste des utilisateurs
+      const select = document.getElementById('classement-user');
+      if (select) {
+        const users = getAllUtilisateurs(parfums);
+        select.innerHTML = `<option value="__ALL__">Général (tous les utilisateurs)</option>` +
+          users.map(u => `<option value="${u}">${u}</option>`).join('');
+      }
+
+      // Affichage initial
+      let selectedUser = select?.value || "__ALL__";
+      afficherPodium(parfums, selectedUser);
+      afficherClassementTable(parfums, selectedUser);
+
+      // Event : changement de user
+      if (select) {
+        select.addEventListener('change', () => {
+          selectedUser = select.value;
+          afficherPodium(parfums, selectedUser);
+          afficherClassementTable(parfums, selectedUser);
+        });
+      }
     });
 }
 
@@ -159,7 +204,7 @@ function afficherDetailParfum(parfum) {
 }
 
 // ==========================
-// FERMETURE DE LA MODALE DETAIL PARTAGÉE (toujours présent)
+// FERMETURE MODALE DETAIL PARTAGÉE
 // ==========================
 document.addEventListener('DOMContentLoaded', () => {
   const modalDetail = document.getElementById('modal-detail');

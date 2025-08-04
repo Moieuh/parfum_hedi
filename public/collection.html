@@ -25,7 +25,6 @@
     <span id="user-name" class="user-name"></span>
 </header>
 
-
   <div>
     <h1>Collection</h1>
     <div class="search-filter-container">
@@ -39,89 +38,91 @@
     <option value="date">Date</option>
   </select>
 </div>
+<main style="max-width: 1200px; margin: 0 auto;">
 
-    <div id="cards-container" class="card"></div>
-    <div id="pagination" class="pagination"></div>
-    <div id="carte-detail"></div>
+  <div id="cards-container" class="card"></div>
+  <div id="pagination" class="pagination"></div>
+  <div id="carte-detail"></div>
   </div>
 
   <!-- ✅ Bouton flottant -->
-    <button id="ouvrir-formulaire" class="btn-flottant">+</button>
+  <button id="ouvrir-formulaire" class="btn-flottant">+</button>
   <!-- ✅ Modale ajout -->
+   
   <div id="modal-ajout" class="modal">
-    <div class="modal-content">
-      <span class="close">&times;</span>
-      <h2>Ajouter un parfum</h2>
-      <form id="form-ajout" enctype="multipart/form-data" onsubmit="return false;">
-        <input id="input-produit" placeholder="Nom du parfum" required />
-        <input id="input-description" placeholder="Description"/>
-        <input id="input-prix" type="number" step="0.01" placeholder="Prix en €" required />
-        <input id="input-image" name="image" type="file"/>
-        <input id="input-marque" name="marque" placeholder="Marque" />
-        <input id="input-taille" name="taille" type="number" placeholder="Taille (ml)" />
-        <input id="input-dateAchat" name="dateAchat" type="date" placeholder="Date d'achat" />
-        <select id="input-occasions" name="occasions">
-          <option value="">-- Choisir une occasion --</option>
-          <option value="quotidien">Quotidien</option>
-          <option value="soirée">Soirée</option>
-          <option value="travail">Travail</option>
-          <option value="sport">Sport</option>
-          <option value="date">Date</option>
-        </select>
-        <select id="input-type" name="type" required>
-          <option value="">-- Choisir un type --</option>
-          <option value="eau de toilette">Eau de toilette</option>
-          <option value="eau de parfum">Eau de parfum</option>
-          <option value="parfum">Parfum</option>
-          <option value="cologne">Cologne</option>
-          <option value="autre">Autre</option>
-        </select>
-        <button id="btn-ajouter" type="button">Ajouter</button>
-      </form>
-      <p id="msg"></p>
-    </div>
+  <div class="modal-content">
+    <span class="close">&times;</span>
+    <h2>Ajouter un parfum</h2>
+    <form id="form-ajout" enctype="multipart/form-data" onsubmit="return false;">
+    <input id="input-produit" placeholder="Nom du parfum" required />
+    <input id="input-description" placeholder="Description"/>
+    <input id="input-prix" type="number" step="0.01" placeholder="Prix en €" required />
+    <input id="input-image" name="image" type="file"/>
+    <input id="input-marque" name="marque" placeholder="Marque" />
+    <input id="input-taille" name="taille" type="number" placeholder="Taille (ml)" />
+    <input id="input-dateAchat" name="dateAchat" type="date" placeholder="Date d'achat" />
+    <select id="input-occasions" name="occasions">
+      <option value="">-- Choisir une occasion --</option>
+      <option value="quotidien">Quotidien</option>
+      <option value="soirée">Soirée</option>
+      <option value="travail">Travail</option>
+      <option value="sport">Sport</option>
+      <option value="date">Date</option>
+    </select>
+    <select id="input-type" name="type" required>
+      <option value="">-- Choisir un type --</option>
+      <option value="eau de toilette">Eau de toilette</option>
+      <option value="eau de parfum">Eau de parfum</option>
+      <option value="parfum">Parfum</option>
+      <option value="cologne">Cologne</option>
+      <option value="autre">Autre</option>
+    </select>
+    <button id="btn-ajouter" type="button">Ajouter</button>
+    </form>
+    <p id="msg"></p>
+  </div>
   </div>
 
   <!-- ✅ Modale de détails déplacée ici -->
   <div id="modal-detail" class="modal">
-    <div class="modal-content">
-      <span class="close-detail">&times;</span>
-      <div id="contenu-detail-parfum"></div>
-    </div>
+  <div class="modal-content">
+    <span class="close-detail">&times;</span>
+    <div id="contenu-detail-parfum"></div>
+  </div>
   </div>
 
   <!-- ✅ Modale de modification -->
   <div id="modal-modifier" class="modal">
-    <div class="modal-content">
-      <span class="close-modifier">&times;</span>
-      <h2>Modifier un parfum</h2>
-      <form id="form-modifier" onsubmit="return false;">
-        <input id="edit-nom" placeholder="Nom du parfum" required />
-        <input id="edit-description" placeholder="Description" />
-        <input id="edit-prix" type="number" step="0.01" placeholder="Prix en €" required />
-        <input id="edit-marque" placeholder="Marque" />
-        <input id="edit-taille" type="number" placeholder="Taille (ml)" />
-        <input id="edit-dateAchat" type="date" />
-        <select id="edit-occasions">
-          <option value="">-- Choisir une occasion --</option>
-          <option value="quotidien">Quotidien</option>
-          <option value="soirée">Soirée</option>
-          <option value="travail">Travail</option>
-          <option value="sport">Sport</option>
-          <option value="date">Date</option>
-        </select>
-        <select id="edit-type" required>
-          <option value="">-- Choisir un type --</option>
-          <option value="eau de toilette">Eau de toilette</option>
-          <option value="eau de parfum">Eau de parfum</option>
-          <option value="parfum">Parfum</option>
-          <option value="cologne">Cologne</option>
-          <option value="autre">Autre</option>
-        </select>
+  <div class="modal-content">
+    <span class="close-modifier">&times;</span>
+    <h2>Modifier un parfum</h2>
+    <form id="form-modifier" onsubmit="return false;">
+    <input id="edit-nom" placeholder="Nom du parfum" required />
+    <input id="edit-description" placeholder="Description" />
+    <input id="edit-prix" type="number" step="0.01" placeholder="Prix en €" required />
+    <input id="edit-marque" placeholder="Marque" />
+    <input id="edit-taille" type="number" placeholder="Taille (ml)" />
+    <input id="edit-dateAchat" type="date" />
+    <select id="edit-occasions">
+      <option value="">-- Choisir une occasion --</option>
+      <option value="quotidien">Quotidien</option>
+      <option value="soirée">Soirée</option>
+      <option value="travail">Travail</option>
+      <option value="sport">Sport</option>
+      <option value="date">Date</option>
+    </select>
+    <select id="edit-type" required>
+      <option value="">-- Choisir un type --</option>
+      <option value="eau de toilette">Eau de toilette</option>
+      <option value="eau de parfum">Eau de parfum</option>
+      <option value="parfum">Parfum</option>
+      <option value="cologne">Cologne</option>
+      <option value="autre">Autre</option>
+    </select>
 
-        <button id="btn-modifier-parfum" type="button">Enregistrer les modifications</button>
-      </form>
-    </div>
+    <button id="btn-modifier-parfum" type="button">Enregistrer les modifications</button>
+    </form>
+  </div>
   </div>
 
 <div id="modal-note" class="modal">
@@ -131,7 +132,7 @@
     <div id="note-contenu"></div>
   </div>
 </div>
-
+</main>
   <footer>
     <p>&copy; 2025 Parf. Tous droits réservés.</p>
   </footer>
