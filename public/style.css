@@ -543,17 +543,13 @@ li {
   FOOTER
   =========================== */
 footer {
-  background: linear-gradient(90deg, #6366f1 0%, #00ff75 100%);
-  color: #23232a;
+  background: #23232a;
+  color: #a5b4fc;
   text-align: center;
-  padding: 24px 0 12px 0;
-  font-size: 0.95em;
-  margin-top: 32px;
-  border-top: 2px solid #23232a;
-  box-shadow: 0 -2px 8px rgba(99,102,241,0.08);
-  /* Supprimer position absolute/fixed et width/left/bottom/z-index */
-  position: static;
-  width: 100%;
+  padding: 18px 0;
+  font-size: 1em;
+  margin-top: 40px;
+  border-top: 1px solid #6366f1;
 }
 
 /* ===========================
