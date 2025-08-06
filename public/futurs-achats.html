@@ -19,73 +19,174 @@
         <li><a href="index.html">Accueil</a></li>
         <li><a href="collection.html">Collection</a></li>
         <li><a href="futurs-achats.html">Futurs achats</a></li>
-        <li><a href="Login.html">Changer d'utilisateur</a></li>
       </ul>
     </nav>
-    <span id="user-name" class="user-name"></span>
+    <a href="Login.html" id="user-name" class="user-name"></a>
   </header>
   <main>
-    <h1>Futurs achats de parfums</h1>
-    <form id="ajout-futur-achat" style="margin-bottom:18px;">
-      <input type="text" id="futur-nom" placeholder="Nom du parfum" required />
-      <input type="text" id="futur-marque" placeholder="Marque" />
-      <input type="number" id="futur-prix" placeholder="Prix estimé (€)" min="0" step="0.01"/>
-      <button type="submit">Ajouter à la liste</button>
-    </form>
-    <ul id="liste-futurs-achats"></ul>
-  </main>
+  <h1>Futurs achats de parfums</h1>
+
+  <!-- SECTION SLIDER DES PREFERES -->
+  <div id="section-slider-pref" style="margin-bottom:32px;">
+  <h2 style="color:#00ff75;">Mes futurs achats prioritaires ⭐</h2>
+  <div id="slider-pref" class="slider"></div>
+</div>
+
+
+  <!-- FORMULAIRE ET LISTE CLASSIQUE -->
+  <form id="ajout-futur-achat" style="margin-bottom:18px;">
+    <input type="text" id="futur-nom" placeholder="Nom du parfum" required />
+    <input type="text" id="futur-marque" placeholder="Marque" />
+    <input type="number" id="futur-prix" placeholder="Prix estimé (€)" min="0" step="0.01"/>
+    <button type="submit">Ajouter à la liste</button>
+  </form>
+  <ul id="liste-futurs-achats"></ul>
+</main>
+
   <footer>
     <p>&copy; 2025 Parf. Tous droits réservés.</p>
   </footer>
   <script>
-    // --- GESTION FUTURS ACHATS EN LOCALSTORAGE ---
-    function getFutursAchats() {
-      return JSON.parse(localStorage.getItem('futursAchats') || '[]');
+  // --- Données en localStorage ---
+  function getFutursAchats() {
+    return JSON.parse(localStorage.getItem('futursAchats') || '[]');
+  }
+  function setFutursAchats(list) {
+    localStorage.setItem('futursAchats', JSON.stringify(list));
+  }
+  // Images "prio" dans localStorage à part (clé = nom unique !)
+  function getPrioImages() {
+    return JSON.parse(localStorage.getItem('futursPrioImages') || '{}');
+  }
+  function setPrioImages(obj) {
+    localStorage.setItem('futursPrioImages', JSON.stringify(obj));
+  }
+
+  function getNbPrio() {
+    return getFutursAchats().filter(item => item.prioritaire).length;
+  }
+
+  function afficherSliderPrio() {
+    const liste = getFutursAchats();
+    const prioImages = getPrioImages();
+    // Limite à 5 "prioritaires"
+    const prios = liste.filter(item => item.prioritaire).slice(0, 5);
+    const slider = document.getElementById('slider-pref');
+    if (!prios.length) {
+      slider.innerHTML = '<div style="color:#a5b4fc;text-align:center;padding:18px;">Sélectionnez vos priorités ⭐</div>';
+      return;
     }
-    function setFutursAchats(list) {
-      localStorage.setItem('futursAchats', JSON.stringify(list));
+    slider.innerHTML = `<div class="slider-list"></div>`;
+    const sliderList = slider.querySelector('.slider-list');
+    prios.forEach((item, idx) => {
+    const image = prioImages[item.nom] || 'https://cdn-icons-png.flaticon.com/512/748/748111.png';
+    const delayAuto = (idx * 2.5) + 's'; // décalage défilement (autoRun)
+    const delayShow = (idx * 2.5) + 's'; // 1s de décalage entre chaque apparition
+    sliderList.innerHTML += `
+      <div class="slider-item" style="--delayShow:${delayShow}; --delayAuto:${delayAuto};">
+        <div class="card">
+          <img src="${image}" class="slider-img" alt="Parfum prioritaire">
+          <div style="margin-bottom:8px;">
+            <span class="pref-star">⭐</span>
+            <b>${item.nom}</b>
+          </div>
+          <div>${item.marque ? '('+item.marque+')' : ''}</div>
+          <div>${item.prix ? '💸 '+item.prix+' €' : ''}</div>
+          <button class="btn-img" onclick="document.getElementById('img-input-${idx}').click()">Changer l'image</button>
+          <input type="file" id="img-input-${idx}" accept="image/*" style="display:none;" onchange="onPrioImageSelected('${item.nom}', this)">
+        </div>
+      </div>
+    `;
+  });
+
+  }
+
+  // Fonction d’upload image pour une priorité
+  window.onPrioImageSelected = function(nom, input) {
+    if (input.files && input.files[0]) {
+      const reader = new FileReader();
+      reader.onload = function(e) {
+        const prioImages = getPrioImages();
+        prioImages[nom] = e.target.result;
+        setPrioImages(prioImages);
+        afficherSliderPrio();
+      };
+      reader.readAsDataURL(input.files[0]);
     }
-    function afficherFutursAchats() {
-      const liste = getFutursAchats();
-      const ul = document.getElementById('liste-futurs-achats');
-      ul.innerHTML = '';
-      liste.forEach((item, idx) => {
-        const li = document.createElement('li');
-        li.innerHTML = `
-          <strong>${item.nom}</strong>
-          ${item.marque ? '('+item.marque+')' : ''} 
-          ${item.prix ? '- '+item.prix+' €' : ''} 
-          <button onclick="supprimerFuturAchat(${idx})" style="margin-left:18px;">❌</button>
-        `;
-        ul.appendChild(li);
-      });
-    }
-    function supprimerFuturAchat(idx) {
-      const liste = getFutursAchats();
-      liste.splice(idx,1);
-      setFutursAchats(liste);
-      afficherFutursAchats();
-    }
-    document.getElementById('ajout-futur-achat').onsubmit = function(e) {
-      e.preventDefault();
-      const nom = document.getElementById('futur-nom').value.trim();
-      const marque = document.getElementById('futur-marque').value.trim();
-      const prix = document.getElementById('futur-prix').value.trim();
-      if (!nom) return;
-      const liste = getFutursAchats();
-      liste.push({ nom, marque, prix });
-      setFutursAchats(liste);
-      afficherFutursAchats();
-      this.reset();
-    };
-    // Affichage user
-    document.addEventListener('DOMContentLoaded', () => {
-      const user = localStorage.getItem('utilisateur') || '';
-      document.getElementById('user-name').textContent = user;
-      afficherFutursAchats();
+  };
+
+  // Liste classique, cards + bouton "⭐" (prioritaire)
+  function afficherFutursAchats() {
+    const liste = getFutursAchats();
+    const prioImages = getPrioImages();
+    const nbPrio = liste.filter(item => item.prioritaire).length;
+    const ul = document.getElementById('liste-futurs-achats');
+    ul.className = 'futur-card-list';
+    ul.innerHTML = '';
+    liste.forEach((item, idx) => {
+      const isPrio = !!item.prioritaire;
+      const image = prioImages[item.nom] || '';
+      const disabled = (!isPrio && nbPrio >= 4) ? 'disabled' : '';
+      const btnTitle = isPrio
+        ? 'Retirer des priorités'
+        : (nbPrio >= 5 ? 'Vous ne pouvez avoir que 4 priorités' : 'Ajouter aux priorités');
+      const li = document.createElement('li');
+      li.className = 'futur-card';
+      li.innerHTML = `
+        <button class="futur-card-delete" title="Supprimer" onclick="supprimerFuturAchat(${idx})">❌</button>
+        <button class="btn-pref${isPrio ? ' selected' : ''}" onclick="togglePrio(${idx})" title="${btnTitle}" ${disabled}>
+          ⭐
+        </button>
+        <strong>${item.nom}</strong>
+        ${item.marque ? `<div>(${item.marque})</div>` : ''}
+        ${item.prix ? `<div style="margin-top:6px;">💸 ${item.prix} €</div>` : ''}
+      `;
+      ul.appendChild(li);
     });
-    // Pour que le bouton fonctionne après suppressions
-    window.supprimerFuturAchat = supprimerFuturAchat;
-  </script>
+    afficherSliderPrio();
+  }
+
+  window.supprimerFuturAchat = function(idx) {
+    const liste = getFutursAchats();
+    const nom = liste[idx].nom;
+    liste.splice(idx, 1);
+    setFutursAchats(liste);
+    // Aussi supprimer image associée si prioritaire
+    const prioImages = getPrioImages();
+    if (prioImages[nom]) { delete prioImages[nom]; setPrioImages(prioImages);}
+    afficherFutursAchats();
+  }
+
+  window.togglePrio = function(idx) {
+    const liste = getFutursAchats();
+    // Si on veut activer et déjà 4 prio, on bloque
+    if (!liste[idx].prioritaire && liste.filter(x => x.prioritaire).length >= 4) return;
+    liste[idx].prioritaire = !liste[idx].prioritaire;
+    setFutursAchats(liste);
+    afficherFutursAchats();
+  }
+
+  document.getElementById('ajout-futur-achat').onsubmit = function(e) {
+    e.preventDefault();
+    const nom = document.getElementById('futur-nom').value.trim();
+    const marque = document.getElementById('futur-marque').value.trim();
+    const prix = document.getElementById('futur-prix').value.trim();
+    if (!nom) return;
+    const liste = getFutursAchats();
+    if (liste.some(item => item.nom === nom)) return alert('Ce parfum est déjà dans la liste.');
+    liste.push({ nom, marque, prix });
+    setFutursAchats(liste);
+    afficherFutursAchats();
+    this.reset();
+  };
+
+  document.addEventListener('DOMContentLoaded', () => {
+    const user = localStorage.getItem('utilisateur') || '';
+    document.getElementById('user-name').textContent = user;
+    afficherFutursAchats();
+  });
+</script>
+
+
 </body>
 </html>

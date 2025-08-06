@@ -532,7 +532,7 @@ function login() {
   const username = document.getElementById('username').value.trim();
   if (username) {
     localStorage.setItem('utilisateur', username);
-    window.location.href = 'collection.html';
+    window.location.href = 'index.html';
   } else {
     alert("Veuillez entrer votre nom d'utilisateur.");
   }
