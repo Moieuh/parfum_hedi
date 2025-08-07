@@ -245,6 +245,22 @@ function renderPagination(totalPages) {
   }
 }
 
+function afficherTotalPrix() {
+  const total = parfumsData.reduce((sum, p) => sum + (parseFloat(p.prix) || 0), 0);
+  let compteur = document.getElementById('compteur-total-prix');
+  if (!compteur) {
+    compteur = document.createElement('div');
+    compteur.id = 'compteur-total-prix';
+    compteur.style = "text-align:right;font-weight:bold;font-size:1.1em;margin:12px 0 0 0;color:var(--accent);";
+    const container = document.getElementById('cards-container');
+    if (container && container.parentNode) {
+      container.parentNode.insertBefore(compteur, container);
+    }
+  }
+  compteur.textContent = `Valeur totale de la collection : ${total.toFixed(2)} €`;
+}
+
+// Modifie updateView pour appeler afficherTotalPrix après le rendu
 function updateView() {
   const term = document.getElementById('search-input')?.value.trim().toLowerCase() || '';
   const occasion = document.getElementById('filter-occasions')?.value || '';
@@ -269,6 +285,9 @@ function updateView() {
   pageItems.forEach(p => ajouterCarteParfum(p));
 
   renderPagination(totalPages);
+
+  // Ajout du compteur après le rendu
+  afficherTotalPrix();
 }
 
 async function ajouterParfum(nom, description, imageFile, prix, marque, taille, dateAchat, occasions, type) {
