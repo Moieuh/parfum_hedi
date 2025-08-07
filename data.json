@@ -120,6 +120,40 @@
       "dateAchat": "",
       "occasions": "",
       "type": "",
+      "notes": [
+        {
+          "utilisateur": "hedi",
+          "note": 2
+        }
+      ],
+      "tenacite": {
+        "médiocre": 0,
+        "faible": 0,
+        "modéré (e)": 0,
+        "longue tenue": 0,
+        "très longue tenue": 0
+      },
+      "sillage": {
+        "discret": 0,
+        "modéré (e)": 0,
+        "puissant": 0,
+        "énorme": 0
+      },
+      "votes": {
+        "tenacite": {},
+        "sillage": {}
+      }
+    },
+    {
+      "nom": "av",
+      "description": "s",
+      "image": "asset/1754487892353_a.png",
+      "prix": 22,
+      "marque": "",
+      "taille": "",
+      "dateAchat": "",
+      "occasions": "",
+      "type": "",
       "notes": [],
       "tenacite": {
         "médiocre": 0,
@@ -138,6 +172,75 @@
         "tenacite": {},
         "sillage": {}
       }
+    },
+    {
+      "nom": "Z",
+      "description": "s",
+      "image": "asset/1754487918256_Z.jpg",
+      "prix": 2,
+      "marque": "",
+      "taille": "",
+      "dateAchat": "",
+      "occasions": "",
+      "type": "",
+      "notes": [],
+      "tenacite": {
+        "médiocre": 0,
+        "faible": 0,
+        "modéré (e)": 0,
+        "longue tenue": 0,
+        "très longue tenue": 0
+      },
+      "sillage": {
+        "discret": 0,
+        "modéré (e)": 0,
+        "puissant": 0,
+        "énorme": 0
+      },
+      "votes": {
+        "tenacite": {},
+        "sillage": {}
+      }
+    }
+  ],
+  "futursAchats": [
+    {
+      "nom": "Bleu de Chanel",
+      "marque": "Chanel",
+      "prix": 115,
+      "prioritaire": true,
+      "image": "asset/1754262985526_blabla.jpg"
+    },
+    {
+      "nom": "dd",
+      "marque": "dd",
+      "prix": "25",
+      "prioritaire": true,
+      "image": ""
+    },
+    {
+      "nom": "a",
+      "marque": "a",
+      "prix": "2",
+      "prioritaire": true
+    },
+    {
+      "nom": "2",
+      "marque": "2",
+      "prix": "2",
+      "prioritaire": true
+    },
+    {
+      "nom": "3",
+      "marque": "3",
+      "prix": "3",
+      "prioritaire": false
+    },
+    {
+      "nom": "5",
+      "marque": "5",
+      "prix": "5",
+      "prioritaire": false
     }
   ]
 }

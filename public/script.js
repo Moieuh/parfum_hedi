@@ -542,6 +542,17 @@ function login() {
 // INITIALISATION
 // ==========================
 document.addEventListener('DOMContentLoaded', async () => {
+  // Remplacer "Occasions" par "Tout" après premier changement
+const selectOccasions = document.getElementById('filter-occasions');
+if (selectOccasions) {
+  selectOccasions.addEventListener('change', function handler() {
+    const firstOption = this.querySelector('option[value=""]');
+    if (firstOption && firstOption.textContent !== "Tout") {
+      firstOption.textContent = "Tout";
+    }
+  });
+}
+
   const currentUser = localStorage.getItem("utilisateur") || "";
   const userNameEl = document.getElementById("user-name");
   if (userNameEl) userNameEl.textContent = currentUser;

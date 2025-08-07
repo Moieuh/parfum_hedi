@@ -26,15 +26,13 @@
   </header>
   <main>
     <h1>🏆 Classement des Parfums</h1>
-    <div id="user-select-classement" style="text-align:center; margin-bottom:20px;">
-    <label for="classement-user" style="color:#a5b4fc; font-weight:bold;">
-      Classement par :
-    </label>
-    <select id="classement-user" style="padding:8px 16px; border-radius:10px; font-size:1.05em; background:#23232a; color:#e5e7eb; border:1px solid #6366f1;">
-      <option value="__ALL__">Général (tous les utilisateurs)</option>
-      <!-- JS ajoutera dynamiquement les autres utilisateurs ici -->
-    </select>
-</div>
+    <div id="user-select-classement" style="margin-bottom: 16px; display: flex; align-items: center; justify-content: center;">
+      <label for="classement-user" style="font-family:'Lato',sans-serif; color:#6366f1; font-weight:700; font-size:1em;">Classement par : </label>
+      <select id="classement-user" style="padding:8px 16px; border-radius:8px; font-size:1em; background:#fff; color:#373737; border:1px solid #6366f1; outline:none; transition:border 0.2s;">
+        <option value="__ALL__">Général (tous les utilisateurs)</option>
+        <!-- JS ajoutera dynamiquement les autres utilisateurs ici -->
+      </select>
+    </div>
 
     <div id="podium-section"></div>
     <h2 style="margin-top:32px;">Le reste du classement</h2>
