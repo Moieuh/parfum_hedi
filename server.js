@@ -14,15 +14,18 @@ app.get('/', (req, res) => {
 });
 app.use(express.static(path.join(__dirname, 'public')));
 
+// Dossier d’upload des assets (créé si absent)
+const assetsDir = path.join(__dirname, 'public', 'asset');
+if (!fs.existsSync(assetsDir)) fs.mkdirSync(assetsDir, { recursive: true });
+
 const upload = multer({
-  dest: path.join(__dirname, 'public/asset')
+  dest: assetsDir
 });
 
 /* ---------------------------------------------------
    Helpers
 --------------------------------------------------- */
 function getUser(req) {
-  // Récupère l'utilisateur depuis body, query ou header
   return (req.body && req.body.utilisateur)
       || (req.query && req.query.utilisateur)
       || req.header('x-user')
@@ -124,9 +127,13 @@ app.post('/api/parfums/:nom/note', (req, res) => {
   const { item: parfum } = findByName(data.parfums, req.params.nom);
 
   if (parfum) {
+    const noteValue = parseFloat(note);
+    if (isNaN(noteValue) || noteValue < 0 || noteValue > 10) {
+      return res.status(400).json({ error: 'Note invalide (doit être un nombre entre 0 et 10)' });
+    }
     const index = parfum.notes.findIndex(n => n.utilisateur === utilisateur);
-    if (index !== -1) parfum.notes[index].note = note;
-    else parfum.notes.push({ utilisateur, note });
+    if (index !== -1) parfum.notes[index].note = noteValue;
+    else parfum.notes.push({ utilisateur, note: noteValue });
     fs.writeFileSync(DATA_FILE, JSON.stringify(data, null, 2), 'utf8');
     return res.json({ message: 'Note enregistrée' });
   }
@@ -217,12 +224,11 @@ app.post('/api/futurs-achats', onlyHedi, (req, res) => {
   const data = JSON.parse(fs.readFileSync(DATA_FILE, 'utf8'));
   if (!data.futursAchats) data.futursAchats = [];
 
-  // Évite les doublons (case/espaces ignorés)
   if (findIndexByName(data.futursAchats, nom) !== -1) {
     return res.status(400).json({ error: 'Ce parfum est déjà dans la liste.' });
   }
 
-  data.futursAchats.push({ nom: nom.trim(), marque, prix, prioritaire: !!prioritaire });
+  data.futursAchats.push({ nom: nom.trim(), marque, prix, prioritaire: !!prioritaire, image: '' });
   fs.writeFileSync(DATA_FILE, JSON.stringify(data, null, 2), 'utf8');
   res.json({ message: 'Ajouté !' });
 });
@@ -234,6 +240,15 @@ app.delete('/api/futurs-achats/:nom', onlyHedi, (req, res) => {
 
   const idx = findIndexByName(data.futursAchats, req.params.nom);
   if (idx === -1) return res.status(404).json({ error: 'Futur achat introuvable' });
+
+  // Supprimer éventuelle image associée
+  const item = data.futursAchats[idx];
+  if (item.image) {
+    const imgPath = path.join(__dirname, 'public', item.image);
+    if (fs.existsSync(imgPath)) {
+      try { fs.unlinkSync(imgPath); } catch (e) { console.error(e); }
+    }
+  }
 
   data.futursAchats.splice(idx, 1);
   fs.writeFileSync(DATA_FILE, JSON.stringify(data, null, 2), 'utf8');
@@ -256,6 +271,42 @@ app.put('/api/futurs-achats/:nom', onlyHedi, (req, res) => {
   data.futursAchats[idx] = item;
   fs.writeFileSync(DATA_FILE, JSON.stringify(data, null, 2), 'utf8');
   res.json({ message: 'Modifié', item });
+});
+
+/* --------- NOUVEAU : upload image futur-achat (hedi) --------- */
+// POST /api/futurs-achats/:nom/image (multipart form-data: { image })
+app.post(
+  '/api/futurs-achats/:nom/image',
+  upload.single('image'),
+  onlyHedi,
+  (req, res) => {  const file = req.file;
+  if (!file) return res.status(400).json({ error: 'Aucune image reçue' });
+
+  const data = JSON.parse(fs.readFileSync(DATA_FILE, 'utf8'));
+  if (!data.futursAchats) data.futursAchats = [];
+
+  const { idx, item } = findByName(data.futursAchats, req.params.nom);
+  if (idx === -1 || !item) return res.status(404).json({ error: 'Futur achat introuvable' });
+
+  // Supprimer l’ancienne image si présente
+  if (item.image) {
+    const oldPath = path.join(__dirname, 'public', item.image);
+    if (fs.existsSync(oldPath)) {
+      try { fs.unlinkSync(oldPath); } catch (e) { console.error(e); }
+    }
+  }
+
+  const ext = path.extname(file.originalname) || path.extname(file.filename) || '.jpg';
+  const safeNom = (item.nom || 'item').toString().replace(/\s+/g, '_');
+  const newFilename = `${Date.now()}_${safeNom}${ext}`;
+  const newPath = path.join(file.destination, newFilename);
+  fs.renameSync(file.path, newPath);
+
+  item.image = `asset/${newFilename}`;
+  data.futursAchats[idx] = item;
+  fs.writeFileSync(DATA_FILE, JSON.stringify(data, null, 2), 'utf8');
+
+  res.json({ message: 'Image enregistrée', item });
 });
 
 // Lancer le serveur

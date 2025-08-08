@@ -33,6 +33,18 @@ function getMedal(rank) {
   return rank === 1 ? '🥇' : rank === 2 ? '🥈' : rank === 3 ? '🥉' : '';
 }
 
+/* ==========================
+   FORMATAGE DATES (mois + année)
+   ========================== */
+function formatDateMoisAnnee(dateStr) {
+  if (!dateStr) return '';
+  // Important: garder le format ISO "YYYY-MM-DD" pour les inputs type="date"
+  // Ici on ne fait que formatter pour l'affichage.
+  const d = new Date(dateStr);
+  if (isNaN(d)) return dateStr; // fallback si date invalide
+  return d.toLocaleDateString('fr-FR', { month: 'long', year: 'numeric' });
+}
+
 // Affichage du podium, selon l'utilisateur choisi
 function afficherPodium(parfums, utilisateur) {
   const podiumSection = document.getElementById('podium-section');
@@ -195,7 +207,7 @@ function afficherDetailParfum(parfum) {
     ${parfum.type ? `<p><strong>Type :</strong> ${parfum.type}</p>` : ''}
     ${parfum.marque ? `<p><strong>Marque :</strong> ${parfum.marque}</p>` : ''}
     ${parfum.taille ? `<p><strong>Taille :</strong> ${parfum.taille} ml</p>` : ''}
-    ${parfum.dateAchat ? `<p><strong>Date d'achat :</strong> ${parfum.dateAchat}</p>` : ''}
+    ${parfum.dateAchat ? `<p><strong>Date d'achat :</strong> ${formatDateMoisAnnee(parfum.dateAchat)}</p>` : ''}
     ${parfum.occasions ? `<p><strong>Occasion :</strong> ${parfum.occasions}</p>` : ''}
     <p><strong>Moyenne :</strong> ${moyenne} / 10</p>
     ${resultatVoteBloc("Ténacité", parfum.tenacite || {})}
@@ -316,7 +328,8 @@ async function noterParfum(nom, utilisateur, note) {
   return await fetch(`/api/parfums/${encodeURIComponent(nom)}/note`, {
     method: 'POST',
     headers: { 'Content-Type': 'application/json' },
-    body: JSON.stringify({ utilisateur, note: parseInt(note) })
+    // Accepte les floats, pas seulement parseInt
+    body: JSON.stringify({ utilisateur, note: parseFloat(note) })
   });
 }
 
@@ -424,6 +437,7 @@ function ajouterCarteParfum(p) {
     <p>${p.description}</p>
     <p>Prix : ${(parseFloat(p.prix) || 0).toFixed(2)} €</p>
     ${p.type ? `<p>Type : ${p.type}</p>` : ''}
+    ${p.dateAchat ? `<p>Date d'achat : ${formatDateMoisAnnee(p.dateAchat)}</p>` : ''}
   `;
 
   const moyenne = Array.isArray(p.notes) && p.notes.length
@@ -463,6 +477,7 @@ function ajouterCarteParfum(p) {
       document.getElementById('edit-prix').value = p.prix;
       document.getElementById('edit-marque').value = p.marque || '';
       document.getElementById('edit-taille').value = p.taille || '';
+      // ⚠️ input type="date" attend un "YYYY-MM-DD" => on garde la valeur brute
       document.getElementById('edit-dateAchat').value = p.dateAchat || '';
       document.getElementById('edit-occasions').value = p.occasions || '';
       document.getElementById('edit-type').value = p.type || '';
@@ -509,7 +524,7 @@ function ouvrirModaleNote(parfum) {
     <div>
       <p><strong>${parfum.nom}</strong></p>
       <label for="note-input">Votre note (sur 10) :</label>
-      <input id="note-input" type="number" min="0" max="10" value="${noteUser}" style="width:60px;" />
+      <input id="note-input" type="number" min="0" max="10" step="0.01" value="${noteUser}" style="width:60px;" />
       <button id="enregistrer-note">Enregistrer</button>
       ${creerBarre("tenacite", ["médiocre", "faible", "modéré (e)", "longue tenue", "très longue tenue"])}
       ${creerBarre("sillage", ["discret", "modéré (e)", "puissant", "énorme"])}
@@ -518,7 +533,8 @@ function ouvrirModaleNote(parfum) {
 
   contenu.querySelector('#enregistrer-note').onclick = async () => {
     const note = contenu.querySelector('#note-input').value;
-    if (note === '' || note < 0 || note > 10) return alert('Veuillez saisir une note entre 0 et 10.');
+    // Vérifie que c'est bien un nombre entre 0 et 10 (float accepté)
+    if (note === '' || isNaN(note) || note < 0 || note > 10) return alert('Veuillez saisir une note entre 0 et 10.');
     const res = await noterParfum(parfum.nom, utilisateur, note);
     if (res.ok) {
       alert("Note enregistrée !");
