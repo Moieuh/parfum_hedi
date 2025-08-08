@@ -3,10 +3,13 @@
 // ==========================
 
 // Récupérer tous les utilisateurs ayant noté au moins un parfum
+// Récupérer tous les utilisateurs ayant noté au moins un parfum
 function getAllUtilisateurs(parfums) {
   const set = new Set();
   parfums.forEach(p => {
-    if (Array.isArray(p.notes)) p.notes.forEach(note => set.add(note.utilisateur));
+    if (Array.isArray(p.notes)) {
+      p.notes.forEach(note => set.add(note.utilisateur));
+    }
   });
   return Array.from(set).sort();
 }
@@ -188,15 +191,15 @@ function afficherDetailParfum(parfum) {
     <img src="${parfum.image}" alt="${parfum.nom}" class="detail-image" />
     <h2>${parfum.nom}</h2>
     <p><strong>Description :</strong> ${parfum.description}</p>
-    <p><strong>Prix :</strong> ${parfum.prix.toFixed(2)} €</p>
+    <p><strong>Prix :</strong> ${(parseFloat(parfum.prix) || 0).toFixed(2)} €</p>
     ${parfum.type ? `<p><strong>Type :</strong> ${parfum.type}</p>` : ''}
     ${parfum.marque ? `<p><strong>Marque :</strong> ${parfum.marque}</p>` : ''}
     ${parfum.taille ? `<p><strong>Taille :</strong> ${parfum.taille} ml</p>` : ''}
     ${parfum.dateAchat ? `<p><strong>Date d'achat :</strong> ${parfum.dateAchat}</p>` : ''}
     ${parfum.occasions ? `<p><strong>Occasion :</strong> ${parfum.occasions}</p>` : ''}
     <p><strong>Moyenne :</strong> ${moyenne} / 10</p>
-    ${resultatVoteBloc("Ténacité", parfum.tenacite)}
-    ${resultatVoteBloc("Sillage", parfum.sillage)}
+    ${resultatVoteBloc("Ténacité", parfum.tenacite || {})}
+    ${resultatVoteBloc("Sillage", parfum.sillage || {})}
   </div>
   `;
 
@@ -333,10 +336,14 @@ async function supprimerParfum(nom) {
   });
   if (res.ok) {
     document.querySelector(`.card2[data-produit="${nom}"]`)?.remove();
+    // MAJ immédiate du total prix
+    parfumsData = await chargerParfums();
+    updateView();
   } else {
     const err = await res.json().catch(() => ({}));
     alert(err.error || 'Erreur lors de la suppression');
   }
+  majInterface();
 }
 
 async function modifierParfum(ancienNom, parfumModifie) {
@@ -415,11 +422,11 @@ function ajouterCarteParfum(p) {
   info.innerHTML = `
     <h2>${p.nom}</h2>
     <p>${p.description}</p>
-    <p>Prix : ${p.prix.toFixed(2)} €</p>
+    <p>Prix : ${(parseFloat(p.prix) || 0).toFixed(2)} €</p>
     ${p.type ? `<p>Type : ${p.type}</p>` : ''}
   `;
 
-  const moyenne = p.notes.length
+  const moyenne = Array.isArray(p.notes) && p.notes.length
     ? (p.notes.reduce((a, b) => a + b.note, 0) / p.notes.length).toFixed(2)
     : 'À venir';
   info.innerHTML += `<p><strong>Moyenne :</strong> ${moyenne} / 10</p>`;
@@ -649,7 +656,7 @@ if (selectOccasions) {
         afficherMessage("Parfum ajouté !");
         parfumsData = await chargerParfums();
         currentPage = 1;
-        updateView();
+        updateView(); // MAJ immédiate du total prix
       } else {
         const data = await res.json().catch(() => ({}));
         afficherMessage(data.error || "Erreur lors de l'ajout", true);
