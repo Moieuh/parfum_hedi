@@ -1,4 +1,730 @@
 {
-  "parfums": [],
-  "futursAchats": []
+  "parfums": [
+    {
+      "nom": "Eros Flame",
+      "description": "Versace Eros Flame est un parfum masculin chaud et sensuel, mêlant fraîcheur d’agrumes et épices vives à une base boisée, ambrée et vanillée, pour un sillage intense et séduisant.",
+      "image": "asset/1754650218081_Eros_Flame.jpg",
+      "prix": 95,
+      "marque": "versace",
+      "taille": "50",
+      "dateAchat": "2025-07-22",
+      "occasions": "soirée",
+      "type": "eau de parfum",
+      "notes": [
+        {
+          "utilisateur": "hedi",
+          "note": 8.25
+        },
+        {
+          "utilisateur": "Ali",
+          "note": 6
+        },
+        {
+          "utilisateur": "skander",
+          "note": 7.5
+        },
+        {
+          "utilisateur": "sarah",
+          "note": 8.65
+        }
+      ],
+      "tenacite": {
+        "médiocre": 0,
+        "faible": 0,
+        "modéré (e)": 2,
+        "longue tenue": 0,
+        "très longue tenue": 0
+      },
+      "sillage": {
+        "discret": 0,
+        "modéré (e)": 1,
+        "puissant": 1,
+        "énorme": 0
+      },
+      "votes": {
+        "tenacite": {
+          "hedi": "modéré (e)",
+          "skander": "modéré (e)"
+        },
+        "sillage": {
+          "hedi": "modéré (e)",
+          "skander": "puissant"
+        }
+      }
+    },
+    {
+      "nom": "Eros Energy",
+      "description": "Versace Eros Energy est un parfum masculin frais et vibrant, mêlant agrumes éclatants, épices subtiles et fond boisé-musqué pour une sensation d’énergie et de confiance.",
+      "image": "asset/1754650410212_Eros_Energy.jpg",
+      "prix": 118,
+      "marque": "Versace",
+      "taille": "",
+      "dateAchat": "2025-05-20",
+      "occasions": "quotidien",
+      "type": "eau de parfum",
+      "notes": [
+        {
+          "utilisateur": "Ali",
+          "note": 9
+        },
+        {
+          "utilisateur": "hedi",
+          "note": 7
+        },
+        {
+          "utilisateur": "skander",
+          "note": 8
+        },
+        {
+          "utilisateur": "sarah",
+          "note": 6.5
+        }
+      ],
+      "tenacite": {
+        "médiocre": 0,
+        "faible": 0,
+        "modéré (e)": 1,
+        "longue tenue": 2,
+        "très longue tenue": 0
+      },
+      "sillage": {
+        "discret": 0,
+        "modéré (e)": 1,
+        "puissant": 2,
+        "énorme": 0
+      },
+      "votes": {
+        "tenacite": {
+          "Ali": "longue tenue",
+          "hedi": "longue tenue",
+          "skander": "modéré (e)"
+        },
+        "sillage": {
+          "Ali": "puissant",
+          "hedi": "modéré (e)",
+          "skander": "puissant"
+        }
+      }
+    },
+    {
+      "nom": "Inginuous Ginger",
+      "description": "Ingenious Ginger de Goldfield & Banks est un parfum lumineux et exotique, associant la fraîcheur épicée du gingembre à des notes d’agrumes et un fond doux, boisé et légèrement gourmand, pour une signature à la fois pétillante et raffinée",
+      "image": "asset/1754650529260_Inginuous_Ginger.jpg",
+      "prix": 170,
+      "marque": "Goldfield and banks",
+      "taille": "100",
+      "dateAchat": "2025-05-31",
+      "occasions": "quotidien",
+      "type": "eau de parfum",
+      "notes": [
+        {
+          "utilisateur": "Ali",
+          "note": 7.5
+        },
+        {
+          "utilisateur": "hedi",
+          "note": 9.5
+        },
+        {
+          "utilisateur": "skander",
+          "note": 10
+        },
+        {
+          "utilisateur": "sarah",
+          "note": 9.8
+        }
+      ],
+      "tenacite": {
+        "médiocre": 0,
+        "faible": 0,
+        "modéré (e)": 0,
+        "longue tenue": 3,
+        "très longue tenue": 0
+      },
+      "sillage": {
+        "discret": 0,
+        "modéré (e)": 3,
+        "puissant": 0,
+        "énorme": 0
+      },
+      "votes": {
+        "tenacite": {
+          "Ali": "longue tenue",
+          "hedi": "longue tenue",
+          "skander": "longue tenue"
+        },
+        "sillage": {
+          "Ali": "modéré (e)",
+          "hedi": "modéré (e)",
+          "skander": "modéré (e)"
+        }
+      }
+    },
+    {
+      "nom": "Cologne Indélibile",
+      "description": "Cologne Indélébile de Frédéric Malle est une eau fraîche raffinée, où la vivacité des agrumes et des fleurs blanches (néroli, fleur d’oranger) se mêle à un musc pur et tenace, offrant une senteur lumineuse, élégante et d’une tenue exceptionnelle.",
+      "image": "asset/1754650605693_Cologne_Indélibile.jfif",
+      "prix": 340,
+      "marque": "Frederic Malle",
+      "taille": "100",
+      "dateAchat": "2025-07-01",
+      "occasions": "quotidien",
+      "type": "eau de parfum",
+      "notes": [
+        {
+          "utilisateur": "Ali",
+          "note": 8
+        },
+        {
+          "utilisateur": "hedi",
+          "note": 8.5
+        },
+        {
+          "utilisateur": "skander",
+          "note": 6.5
+        },
+        {
+          "utilisateur": "sarah",
+          "note": 8
+        }
+      ],
+      "tenacite": {
+        "médiocre": 1,
+        "faible": 0,
+        "modéré (e)": 0,
+        "longue tenue": 0,
+        "très longue tenue": 2
+      },
+      "sillage": {
+        "discret": 2,
+        "modéré (e)": 0,
+        "puissant": 1,
+        "énorme": 0
+      },
+      "votes": {
+        "tenacite": {
+          "Ali": "très longue tenue",
+          "hedi": "médiocre",
+          "skander": "très longue tenue"
+        },
+        "sillage": {
+          "hedi": "discret",
+          "Ali": "discret",
+          "skander": "puissant"
+        }
+      }
+    },
+    {
+      "nom": "Grand Soir",
+      "description": "Grand Soir de Maison Francis Kurkdjian est un parfum ambré et oriental, mêlant chaleur de la vanille, richesse de l’ambre et douceur des fèves tonka, pour une fragrance enveloppante, élégante et sophistiquée, idéale en soirée.",
+      "image": "asset/1754650704393_Grand_Soir.jfif",
+      "prix": 110,
+      "marque": "Maison Francis Kurkdjian",
+      "taille": "35",
+      "dateAchat": "2025-06-21",
+      "occasions": "date",
+      "type": "eau de parfum",
+      "notes": [
+        {
+          "utilisateur": "Ali",
+          "note": 6.5
+        },
+        {
+          "utilisateur": "hedi",
+          "note": 9
+        },
+        {
+          "utilisateur": "skander",
+          "note": 9.5
+        },
+        {
+          "utilisateur": "sarah",
+          "note": 9.95
+        }
+      ],
+      "tenacite": {
+        "médiocre": 0,
+        "faible": 0,
+        "modéré (e)": 0,
+        "longue tenue": 2,
+        "très longue tenue": 1
+      },
+      "sillage": {
+        "discret": 0,
+        "modéré (e)": 1,
+        "puissant": 1,
+        "énorme": 1
+      },
+      "votes": {
+        "tenacite": {
+          "Ali": "longue tenue",
+          "hedi": "longue tenue",
+          "skander": "très longue tenue"
+        },
+        "sillage": {
+          "Ali": "modéré (e)",
+          "hedi": "puissant",
+          "skander": "énorme"
+        }
+      }
+    },
+    {
+      "nom": "MYSLF",
+      "description": "MYSLF Le Parfum d’Yves Saint Laurent est une fragrance boisée et ambrée, combinant fraîcheur aromatique en ouverture à un cœur floral élégant, sur un fond chaleureux de bois et d’ambre, pour un sillage intense et affirmé.",
+      "image": "asset/1754650814349_MYSLF.jfif",
+      "prix": 182,
+      "marque": "Yves Saint Laurent",
+      "taille": "100",
+      "dateAchat": "2025-06-25",
+      "occasions": "soirée",
+      "type": "parfum",
+      "notes": [
+        {
+          "utilisateur": "Ali",
+          "note": 8.5
+        },
+        {
+          "utilisateur": "hedi",
+          "note": 7
+        },
+        {
+          "utilisateur": "skander",
+          "note": 8.5
+        },
+        {
+          "utilisateur": "sarah",
+          "note": 7
+        }
+      ],
+      "tenacite": {
+        "médiocre": 0,
+        "faible": 0,
+        "modéré (e)": 2,
+        "longue tenue": 1,
+        "très longue tenue": 0
+      },
+      "sillage": {
+        "discret": 0,
+        "modéré (e)": 3,
+        "puissant": 0,
+        "énorme": 0
+      },
+      "votes": {
+        "tenacite": {
+          "Ali": "modéré (e)",
+          "hedi": "modéré (e)",
+          "skander": "longue tenue"
+        },
+        "sillage": {
+          "Ali": "modéré (e)",
+          "hedi": "modéré (e)",
+          "skander": "modéré (e)"
+        }
+      }
+    },
+    {
+      "nom": "Y",
+      "description": "Y Eau de Parfum d’Yves Saint Laurent est un parfum masculin frais et intense, alliant la vivacité des agrumes et du gingembre à un cœur aromatique de sauge, sur un fond profond et sensuel de bois ambrés et de fève tonka.",
+      "image": "asset/1754650945347_Y.jfif",
+      "prix": 205,
+      "marque": "Yves Saint Laurent",
+      "taille": "200",
+      "dateAchat": "2025-03-27",
+      "occasions": "quotidien",
+      "type": "eau de parfum",
+      "notes": [
+        {
+          "utilisateur": "Ali",
+          "note": 8.5
+        },
+        {
+          "utilisateur": "hedi",
+          "note": 8.5
+        },
+        {
+          "utilisateur": "skander",
+          "note": 8
+        },
+        {
+          "utilisateur": "sarah",
+          "note": 7
+        }
+      ],
+      "tenacite": {
+        "médiocre": 0,
+        "faible": 0,
+        "modéré (e)": 0,
+        "longue tenue": 3,
+        "très longue tenue": 0
+      },
+      "sillage": {
+        "discret": 0,
+        "modéré (e)": 3,
+        "puissant": 0,
+        "énorme": 0
+      },
+      "votes": {
+        "tenacite": {
+          "Ali": "longue tenue",
+          "hedi": "longue tenue",
+          "skander": "longue tenue"
+        },
+        "sillage": {
+          "Ali": "modéré (e)",
+          "hedi": "modéré (e)",
+          "skander": "modéré (e)"
+        }
+      }
+    },
+    {
+      "nom": "Le Beau",
+      "description": "Le Beau Eau de Parfum de Jean Paul Gaultier est une fragrance masculine sensuelle et exotique, mêlant la douceur de la fève tonka et de la noix de coco à la fraîcheur vive du gingembre, pour un sillage à la fois chaleureux et séduisant.",
+      "image": "asset/1754651089577_Le_Beau.jfif",
+      "prix": 101,
+      "marque": "Jean Paul Gaultier",
+      "taille": "75",
+      "dateAchat": "2025-06-20",
+      "occasions": "soirée",
+      "type": "eau de parfum",
+      "notes": [
+        {
+          "utilisateur": "Ali",
+          "note": 7
+        },
+        {
+          "utilisateur": "hedi",
+          "note": 6.75
+        },
+        {
+          "utilisateur": "skander",
+          "note": 7.5
+        },
+        {
+          "utilisateur": "sarah",
+          "note": 8.5
+        }
+      ],
+      "tenacite": {
+        "médiocre": 1,
+        "faible": 1,
+        "modéré (e)": 1,
+        "longue tenue": 0,
+        "très longue tenue": 0
+      },
+      "sillage": {
+        "discret": 0,
+        "modéré (e)": 2,
+        "puissant": 1,
+        "énorme": 0
+      },
+      "votes": {
+        "tenacite": {
+          "Ali": "modéré (e)",
+          "hedi": "faible",
+          "skander": "médiocre"
+        },
+        "sillage": {
+          "Ali": "modéré (e)",
+          "hedi": "puissant",
+          "skander": "modéré (e)"
+        }
+      }
+    },
+    {
+      "nom": "Odyssey Mandarin Sky",
+      "description": "Odyssey Mandarin Sky d’Armaf est un parfum vibrant et chaleureux, mariant la fraîcheur pétillante de la mandarine et des agrumes à des notes épicées et boisées, pour un sillage énergique, moderne et séduisant.",
+      "image": "asset/1754651231546_Odyssey_Mandarin_Sky.jfif",
+      "prix": 45,
+      "marque": "Armaf",
+      "taille": "200",
+      "dateAchat": "2025-06-23",
+      "occasions": "sport",
+      "type": "eau de parfum",
+      "notes": [
+        {
+          "utilisateur": "Ali",
+          "note": 7
+        },
+        {
+          "utilisateur": "hedi",
+          "note": 6.5
+        },
+        {
+          "utilisateur": "skander",
+          "note": 9
+        },
+        {
+          "utilisateur": "sarah",
+          "note": 7
+        }
+      ],
+      "tenacite": {
+        "médiocre": 0,
+        "faible": 0,
+        "modéré (e)": 1,
+        "longue tenue": 1,
+        "très longue tenue": 1
+      },
+      "sillage": {
+        "discret": 0,
+        "modéré (e)": 0,
+        "puissant": 3,
+        "énorme": 0
+      },
+      "votes": {
+        "tenacite": {
+          "Ali": "modéré (e)",
+          "hedi": "longue tenue",
+          "skander": "très longue tenue"
+        },
+        "sillage": {
+          "Ali": "puissant",
+          "hedi": "puissant",
+          "skander": "puissant"
+        }
+      }
+    },
+    {
+      "nom": "Méteore",
+      "description": "Météore de Louis Vuitton est une fragrance fraîche et lumineuse, mêlant éclat d’agrumes vifs à des notes épicées de poivre et de cardamome, sur un fond boisé élégant, pour un sillage énergisant et sophistiqué.",
+      "image": "asset/1754651345014_Méteore.jfif",
+      "prix": 300,
+      "marque": "Louis Vuitton",
+      "taille": "100",
+      "dateAchat": "2025-03-02",
+      "occasions": "travail",
+      "type": "eau de parfum",
+      "notes": [
+        {
+          "utilisateur": "Ali",
+          "note": 7
+        },
+        {
+          "utilisateur": "hedi",
+          "note": 8
+        },
+        {
+          "utilisateur": "skander",
+          "note": 6
+        },
+        {
+          "utilisateur": "sarah",
+          "note": 7.8
+        }
+      ],
+      "tenacite": {
+        "médiocre": 0,
+        "faible": 1,
+        "modéré (e)": 2,
+        "longue tenue": 0,
+        "très longue tenue": 0
+      },
+      "sillage": {
+        "discret": 3,
+        "modéré (e)": 0,
+        "puissant": 0,
+        "énorme": 0
+      },
+      "votes": {
+        "tenacite": {
+          "Ali": "modéré (e)",
+          "hedi": "modéré (e)",
+          "skander": "faible"
+        },
+        "sillage": {
+          "Ali": "discret",
+          "hedi": "discret",
+          "skander": "discret"
+        }
+      }
+    },
+    {
+      "nom": "Gentleman Society Ambrée",
+      "description": "ChatGPT a dit : Gentleman Society Eau de Parfum Ambrée de Givenchy est un parfum masculin chaud et raffiné, associant des notes ambrées profondes à des accents boisés et épicés, pour un sillage intense, élégant et résolument sophistiqué",
+      "image": "asset/1754651469217_Gentleman_Society_Ambrée.jfif",
+      "prix": 139,
+      "marque": "Givenchy",
+      "taille": "100",
+      "dateAchat": "2025-07-11",
+      "occasions": "soirée",
+      "type": "eau de parfum",
+      "notes": [
+        {
+          "utilisateur": "Ali",
+          "note": 6
+        },
+        {
+          "utilisateur": "hedi",
+          "note": 6
+        },
+        {
+          "utilisateur": "skander",
+          "note": 7
+        },
+        {
+          "utilisateur": "sarah",
+          "note": 7
+        }
+      ],
+      "tenacite": {
+        "médiocre": 0,
+        "faible": 0,
+        "modéré (e)": 0,
+        "longue tenue": 1,
+        "très longue tenue": 2
+      },
+      "sillage": {
+        "discret": 0,
+        "modéré (e)": 0,
+        "puissant": 0,
+        "énorme": 3
+      },
+      "votes": {
+        "tenacite": {
+          "Ali": "longue tenue",
+          "hedi": "très longue tenue",
+          "skander": "très longue tenue"
+        },
+        "sillage": {
+          "Ali": "énorme",
+          "hedi": "énorme",
+          "skander": "énorme"
+        }
+      }
+    },
+    {
+      "nom": "Tiger Cal Cologne Edition",
+      "description": "Rayhaan Tiger Cal Cologne Edition est un parfum oriental boisé et épicé, mêlant la chaleur des épices (cannelle, muscade), la richesse des bois précieux et la profondeur de l’ambre, soutenus par une touche florale et fruitée sombre, pour un sillage intense, luxueux et envoûtant.",
+      "image": "asset/1754651568998_Tiger_Cal_Cologne_Edition.jfif",
+      "prix": 45,
+      "marque": "Rayhaan",
+      "taille": "100",
+      "dateAchat": "2025-06-15",
+      "occasions": "date",
+      "type": "eau de parfum",
+      "notes": [
+        {
+          "utilisateur": "hedi",
+          "note": 8.25
+        },
+        {
+          "utilisateur": "Ali",
+          "note": 8
+        },
+        {
+          "utilisateur": "skander",
+          "note": 7.5
+        },
+        {
+          "utilisateur": "sarah",
+          "note": 8.5
+        }
+      ],
+      "tenacite": {
+        "médiocre": 0,
+        "faible": 0,
+        "modéré (e)": 0,
+        "longue tenue": 0,
+        "très longue tenue": 3
+      },
+      "sillage": {
+        "discret": 0,
+        "modéré (e)": 0,
+        "puissant": 0,
+        "énorme": 3
+      },
+      "votes": {
+        "tenacite": {
+          "hedi": "très longue tenue",
+          "Ali": "très longue tenue",
+          "skander": "très longue tenue"
+        },
+        "sillage": {
+          "Ali": "énorme",
+          "hedi": "énorme",
+          "skander": "énorme"
+        }
+      }
+    },
+    {
+      "nom": "Secret des Pyramides",
+      "description": "Cette fragrance boisée musquée est irrésistible ! Encens, cèdre, bois secs et musc se lient harmonieusement dans une eau de parfum d'exception et de caractère…",
+      "image": "asset/1755007275785_Secret_des_Pyramides.jfif",
+      "prix": 35,
+      "marque": "Maison des Senteurs",
+      "taille": "100",
+      "dateAchat": "2025-08-12",
+      "occasions": "soirée",
+      "type": "eau de parfum",
+      "notes": [
+        {
+          "utilisateur": "Ali",
+          "note": 7.5
+        }
+      ],
+      "tenacite": {
+        "médiocre": 0,
+        "faible": 0,
+        "modéré (e)": 0,
+        "longue tenue": 0,
+        "très longue tenue": 0
+      },
+      "sillage": {
+        "discret": 0,
+        "modéré (e)": 0,
+        "puissant": 1,
+        "énorme": 0
+      },
+      "votes": {
+        "tenacite": {},
+        "sillage": {
+          "Ali": "puissant"
+        }
+      }
+    }
+  ],
+  "futursAchats": [
+    {
+      "nom": "BabyCat",
+      "marque": "Yves Saint Laurent",
+      "prix": "220",
+      "prioritaire": true,
+      "image": "asset/1754845510843_BabyCat.jfif"
+    },
+    {
+      "nom": "Bianco Latte",
+      "marque": "Giardini di Toscana",
+      "prix": "125",
+      "prioritaire": true,
+      "image": "asset/1754845543705_Bianco_Latte.jfif"
+    },
+    {
+      "nom": "Althair",
+      "marque": "Parfum de Marly",
+      "prix": "220",
+      "prioritaire": false,
+      "image": ""
+    },
+    {
+      "nom": "Naxos",
+      "marque": "Xerjoff",
+      "prix": "220",
+      "prioritaire": true,
+      "image": "asset/1754845566611_Naxos.jfif"
+    },
+    {
+      "nom": "SlikyWoods",
+      "marque": "Goldfield and Banks",
+      "prix": "220",
+      "prioritaire": true,
+      "image": "asset/1754845555808_SlikyWoods.jfif"
+    },
+    {
+      "nom": "Radical Rose",
+      "marque": "Matière Première",
+      "prix": "240",
+      "prioritaire": false,
+      "image": ""
+    }
+  ]
 }
