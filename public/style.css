@@ -67,7 +67,7 @@ main h2, .modal-content h2 {
 /*      HEADER & NAVIGATION    */
 /* =========================== */
 header {
-  background: var(--bg-card);
+  background: url("asset/pattern-parfum.jpg") repeat center/300px auto; /* pattern */
   border-bottom: 2px solid var(--light);
   box-shadow: 0 1px 10px rgba(67,40,24,0.08);
   padding: 36px 0 18px 0;
@@ -79,23 +79,23 @@ header {
 
 .logo {
   margin-left: 40px;
-  height: 56px;
-  width: 56px;
-  border-radius: 50%;
-  background: #fff;
-  box-shadow: 0 2px 8px rgba(67,40,24,0.13);
-  border: 1.5px solid var(--accent);
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  transition: box-shadow 0.2s, transform 0.14s;
+  height: 90px; /* plus grand */
+  width: 200px;
+  border-radius: 12px; /* plus carré pour l'image */
+  background: none;
+  box-shadow: none;
+  border: none;
 }
 
-.logo:hover {
-  box-shadow: 0 4px 24px var(--accent, #fa7a1e33);
-  transform: scale(1.07) rotate(-5deg);
-  border-color: var(--gold);
+
+.logo img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;                 /* remplit joliment le cercle */
+  display: block;
 }
+
+
 
 header .user-name {
   background: var(--light);
