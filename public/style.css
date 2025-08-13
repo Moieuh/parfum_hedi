@@ -26,6 +26,7 @@ body {
   display: flex;
   flex-direction: column;
   letter-spacing: 0.01em;
+  overflow-x: hidden; /* ✅ évite le scroll horizontal parasite */
 }
 
 main {
@@ -36,7 +37,8 @@ main {
   box-shadow: var(--shadow);
   padding: 60px 48px 32px 48px;
   min-height: 70vh;
-  min-width: 100vh;
+  width: 100%;            /* ✅ s’adapte à l’écran */
+  /* min-width: 100vh;    ❌ supprimé: bloquait le responsive */
   transition: box-shadow 0.3s;
 }
 
@@ -75,27 +77,27 @@ header {
   align-items: center;
   justify-content: space-between;
   position: relative;
+  flex-wrap: wrap;       /* ✅ permet le retour à la ligne */
+  row-gap: 12px;         /* ✅ espace quand ça wrap */
 }
 
 .logo {
   margin-left: 40px;
-  height: 90px; /* plus grand */
+  height: 90px;
   width: 200px;
-  border-radius: 12px; /* plus carré pour l'image */
+  border-radius: 12px;
   background: none;
   box-shadow: none;
   border: none;
+  max-width: 40vw;       /* ✅ évite de dépasser sur petits écrans */
 }
-
 
 .logo img {
   width: 100%;
   height: 100%;
-  object-fit: cover;                 /* remplit joliment le cercle */
+  object-fit: cover;
   display: block;
 }
-
-
 
 header .user-name {
   background: var(--light);
@@ -121,6 +123,8 @@ nav ul {
   gap: 34px;
   margin: 0 44px 0 0;
   padding: 0;
+  flex-wrap: wrap;                /* ✅ retour à la ligne si besoin */
+  justify-content: center;        /* ✅ centré en mobile */
 }
 
 nav a {
@@ -399,10 +403,17 @@ input[type="file"]::file-selector-button:hover {
   border-radius: 16px;
   overflow: hidden;
   box-shadow: 0 1px 12px #fa7a1e0a;
+
+  display: block;        /* ✅ permet le scroll horizontal si trop étroit */
+  overflow-x: auto;      /* ✅ */
+}
+.ranking-table thead, .ranking-table tbody, .ranking-table tr {
+  width: 100%;
 }
 .ranking-table th, .ranking-table td {
   padding: 16px 11px;
   text-align: center;
+  white-space: nowrap;    /* ✅ évite la casse moche en très petit */
 }
 .ranking-table th {
   color: var(--accent);
@@ -725,7 +736,6 @@ footer {
   border: none;
   box-shadow: 0 2px 8px #fa7a1e18;
 }
-
 /* =========================== */
 /*         RESPONSIVE          */
 /* =========================== */
@@ -735,16 +745,9 @@ footer {
   .podium-place { min-width: 94vw; min-height: 110px; max-width: 440px; padding: 12px 0 18px 0;}
   .podium-place img { width: 66px; height: 66px; }
 }
-@media (max-width: 600px) {
-  main { padding: 8px 2vw;}
-  .modal-content { padding: 16px; width: 98%; max-width: 99vw;}
-  .btn-flottant { right: 12px; bottom: 12px; width: 54px; height: 54px; font-size: 28px;}
-  header { flex-direction: column; align-items: flex-start; gap: 16px;}
-  .logo { margin-left: 10px;}
-  .card2 { flex-direction: column; align-items: flex-start; padding: 18px 10px; gap: 12px;}
-  .card2 img { margin-bottom: 12px; margin-right: 0;}
-}
+
 @media (max-width: 700px) {
+  nav a { padding: 10px 16px; }       /* ✅ liens nav plus compacts */
   .search-filter-container {
     flex-direction: column;
     gap: 7px;
@@ -756,7 +759,30 @@ footer {
     margin-right: 0;
   }
 }
-/* Position fixe du bouton + sur desktop */
+
+@media (max-width: 600px) {
+  main { padding: 8px 2vw; }
+  header { 
+    flex-direction: column; 
+    align-items: stretch;  /* ✅ plein écran pour les éléments */
+    gap: 12px;
+    padding: 20px 12px 12px;
+  }
+  .logo { 
+    margin-left: 0; 
+    width: 140px;         /* ✅ logo réduit */
+    height: 64px;
+  }
+  nav ul { 
+    margin: 0; 
+    gap: 10px; 
+  }
+  .modal-content { padding: 16px; width: 98%; max-width: 99vw;}
+  .btn-flottant { right: 12px; bottom: 12px; width: 54px; height: 54px; font-size: 28px;}
+  .card2 { flex-direction: column; align-items: flex-start; padding: 18px 10px; gap: 12px;}
+  .card2 img { margin-bottom: 12px; margin-right: 0;}
+}
+
 @media (min-width: 1025px) {
   .btn-flottant {
     position: fixed;
