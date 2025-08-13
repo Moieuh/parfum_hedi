@@ -537,12 +537,13 @@ function ouvrirModaleNote(parfum) {
     if (note === '' || isNaN(note) || note < 0 || note > 10) return alert('Veuillez saisir une note entre 0 et 10.');
     const res = await noterParfum(parfum.nom, utilisateur, note);
     if (res.ok) {
-      alert("Note enregistrée !");
-      modal.style.display = 'none';
-      parfumsData = await chargerParfums();
-      updateView();
-      majInterface();
-    } else {
+  parfumsData = await chargerParfums();
+  const parfumMaj = parfumsData.find(p => p.nom === parfum.nom);
+  ouvrirModaleNote(parfumMaj);
+  updateView();
+  majInterface();
+}
+ else {
       alert('Erreur lors de la notation');
     }
   };
@@ -556,12 +557,16 @@ function ouvrirModaleNote(parfum) {
 
       const res = await voterParfum(parfum.nom, type, valeur, utilisateur);
       if (res.ok) {
-        alert("Vote enregistré !");
-        modal.style.display = 'none';
-        parfumsData = await chargerParfums();
-        updateView();
-        majInterface();
-      } else {
+  parfumsData = await chargerParfums();
+  // On peut recharger le contenu pour voir les votes mis à jour
+  const parfumMaj = parfumsData.find(p => p.nom === parfum.nom);
+  ouvrirModaleNote(parfumMaj);
+  updateView();
+  majInterface();
+
+
+}
+ else {
         alert('Erreur lors du vote');
       }
     });
