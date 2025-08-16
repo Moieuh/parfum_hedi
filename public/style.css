@@ -403,9 +403,6 @@ input[type="file"]::file-selector-button:hover {
   border-radius: 16px;
   overflow: hidden;
   box-shadow: 0 1px 12px #fa7a1e0a;
-
-  display: block;        /* ✅ permet le scroll horizontal si trop étroit */
-  overflow-x: auto;      /* ✅ */
 }
 .ranking-table thead, .ranking-table tbody, .ranking-table tr {
   width: 100%;
@@ -869,4 +866,58 @@ footer {
     align-self: flex-end;
     margin-left: auto;
   }
+}
+
+/* ====== Slider: tuning vitesse tablettes ====== */
+@media (max-width: 900px) {
+  /* on allonge la durée pour éviter que les cartes se rattrapent trop vite */
+  .slider .slider-item {
+    animation-duration: 16s; /* au lieu de 10s */
+  }
+}
+@media (max-width: 700px) {
+  .slider .slider-item {
+    animation-duration: 22s; /* encore un peu plus lent */
+  }
+}
+
+/* ====== Slider: mode "scroll-snap" sur mobile (pas d'animation) ====== */
+@media (max-width: 600px) {
+  /* le conteneur devient scrollable horizontalement */
+  .slider {
+    height: auto;
+    overflow-x: auto;
+    overflow-y: hidden;
+    mask-image: none;
+    -webkit-mask-image: none;
+    scroll-snap-type: x mandatory; /* snap par carte */
+    -webkit-overflow-scrolling: touch;
+  }
+
+  /* la liste passe en flux normal */
+  .slider .slider-list {
+    position: static;          /* override du position:relative s'il gêne */
+    display: flex;
+    gap: 12px;
+    padding: 8px 12px;
+    width: max-content;        /* s’adapte au nombre d’items */
+  }
+
+  /* chaque item redevient "statique", plus d'animation */
+  .slider .slider-item {
+    position: relative;
+    left: auto;
+    opacity: 1;
+    animation: none !important; /* coupe cardPopIn + autoRun */
+    width: 75vw;                /* large carte tactile */
+    height: 75vw;
+    max-width: 260px;           /* garde le style confortable */
+    max-height: 260px;
+    flex: 0 0 auto;             /* empêche le rétrécissement */
+    scroll-snap-align: center;  /* snap au centre de l’écran */
+  }
+}
+
+@media (min-width: 601px) {
+  .slider .slider-item { margin-right: 22px; } /* un poil plus d’air */
 }
